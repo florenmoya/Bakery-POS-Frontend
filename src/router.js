@@ -27,6 +27,30 @@ export default new Router({
                 import( /* webpackChunkName: "about" */ "./views/Sales.vue")
         },
         {
+            path: "/reports",
+            name: "Reports",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Reports.vue")
+        },
+        {
+            path: "/settings",
+            name: "Settings",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Settings.vue")
+        },
+        {
             path: "/sales/sale",
             name: "Sale",
             meta: {
@@ -37,6 +61,30 @@ export default new Router({
             // which is lazy-loaded when the route is visited.
             component: () =>
                 import( /* webpackChunkName: "about" */ "./views/Sales_Sale.vue")
+        },
+        {
+            path: "/sales/register",
+            name: "Sale_Register",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Sales_Register.vue")
+        },
+        {
+            path: "/sales/register/Close",
+            name: "Sale_Register_Close",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Sales_Register_Close.vue")
         },
         {
             path: "/sales/items",
@@ -103,6 +151,24 @@ export default new Router({
             },
             component: () =>
                 import( /* webpackChunkName: "about" */ "./views/Inventory_Categories.vue")
+        },
+        {
+            path: "/inventory/delivery/add",
+            name: "Deliveries_Add",
+            meta: {
+                requiresAuth: true
+            },
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Inventory_Delivery_Add.vue")
+        },
+        {
+            path: "/inventory/delivery/add/items",
+            name: "Deliveries_Add_Items",
+            meta: {
+                requiresAuth: true
+            },
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Inventory_Delivery_Add_Items.vue")
         },
         {
             path: "/login",

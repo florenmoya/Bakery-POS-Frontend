@@ -1,6 +1,5 @@
 <template>
-    <DataTableCrud :search="search" :headers="headers" :items="categories" :dialogprop="dialog" :editedIndexprop="editedIndex" :editItems="editItems" :editedItemprop="editedItem" :single-select="singleSelect" :selected="selected" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :show_select="show_select" 
-    :dialogShowprop="dialogShowprop" :loading="isLoading" />
+    <DataTableCrud :search="search" :headers="headers" :items="categories" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name"/>
 </template>
 <script>
 import DataTableCrud from '../components/DataTableCrud';
@@ -14,13 +13,11 @@ export default {
     },
     data() {
         return {
-            show_select: true,
-            singleSelect: false,
-            selected: [],
+            link_name: 'Categories_Add',
             sortby: 'category_name',
             items_per_page: 20,
             dialog: false,
-            dialogShowprop: false,
+            dialogShow: false,
             search: '',
             headers: [
                 { text: 'Name', value: 'category_name' },
@@ -43,9 +40,6 @@ export default {
     mounted() {
         this.$store.dispatch('retrieveCategories')
         this.isLoaded = true;
-               if (this.$router.history.current.name == 'Categories_Add') {
-            this.dialogShowprop = true
-        }
 
     },
     computed: mapState([

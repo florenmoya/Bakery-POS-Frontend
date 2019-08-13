@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+window.Vue = Vue;
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
         token: localStorage.getItem('access_token') || null,
         username: localStorage.getItem('username') || null,
         items: [],
+        register: JSON.parse(localStorage.getItem('register')) || null,
         categories: [],
         isLoading: false
     },
@@ -21,17 +23,19 @@ export default new Vuex.Store({
         loggedUser(state) {
             return state.username
         },
+        retrieveRegister(state, data) {
+            return state.register
+        },
         items(state) {
             return state.items
         },
-        retrieveSalesCart(state) {
-            return state.sales_cart
+        isLoading(state) {
+            return state.isLoading
         }
     },
     mutations: {
         retrieveToken(state, token) {
             state.token = token
-
         },
         destroyToken(state) {
             state.token = null
@@ -41,6 +45,9 @@ export default new Vuex.Store({
         },
         retrieveItems(state, data) {
             state.items = data
+        },
+        retrieveRegister(state, data) {
+            state.register = data
         },
         retrieveCategories(state, data) {
             state.categories = data
@@ -116,6 +123,87 @@ export default new Vuex.Store({
                         username: credentials.username,
                         password: credentials.password,
                         password_confirmation: credentials.password_confirmation
+                    })
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
+        retrieveRegister(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('http://localhost:8001/api/sales/register')
+                    .then(function(response) {
+                        localStorage.setItem('register', JSON.stringify(response.data))
+                        context.commit('retrieveRegister', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
+        storeRegister(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('http://localhost:8001/api/sales/register', {
+                        username: this.state.username,
+                        amount: data.amount
+                    })
+                    .then(function(response) {
+                        localStorage.setItem('register', JSON.stringify(response.data))
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
+        storeRegisterClose(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('http://localhost:8001/api/sales/register/close', {
+                        username: this.state.username,
+                        amount: data.amount
+                    })
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
+        storeSalesItem(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('http://localhost:8001/api/sales', {
+                        register_id: data.register_id,
+                        items: data.items
+                    })
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
+        storeDeliveriesItem(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('http://localhost:8001/api/deliveries', {
+                        items: data.items
                     })
                     .then(function(response) {
                         resolve(response);

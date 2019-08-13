@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <div class="ma-2"> Item
+        <div class="ma-2"> Sales
             <hr>
         </div>
         <ButtonList :button_list="sales_buttons" />
@@ -8,10 +8,6 @@
             <hr>
         </div>
         <ButtonList :button_list="register_buttons" />
-        <div class="ma-2"> Deliver, and Purchase Orders
-            <hr>
-        </div>
-        <ButtonList :button_list="deliveries_buttons" />
     </v-container>
 </template>
 <script>
@@ -24,30 +20,21 @@ export default {
     data() {
         return {
             sales_buttons: [{
-                name: 'Search Item',
+                name: 'Today',
                 icon: 'search',
                 path: '/inventory/item'
             }, {
-                name: 'Add Item',
-                icon: 'add',
+                name: 'Closing Counts',
+                icon: 'close',
                 path: '/inventory/item/add'
             }],
             register_buttons: [{
-                name: 'Counts',
+                name: 'Inventory',
                 icon: 'playlist_add_check'
             }, {
-                name: 'Categories',
+                name: 'Total Deliveries',
                 icon: 'note',
                 path: '/inventory/categories'
-            }, {
-                name: 'Add Category',
-                icon: 'note_add',
-                path: '/inventory/categories/add'
-            }],
-            deliveries_buttons: [{
-                name: 'Add Delivery',
-                icon: 'library_add',
-                path: '/inventory/delivery/add'
             }]
         }
     }

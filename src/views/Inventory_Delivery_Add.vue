@@ -10,7 +10,7 @@
                     <v-layout justify-space-between>
                         <v-flex xs6 md9>
                             <v-container class="datatable mt-2 mb-2">
-                                <Cart :headers="headers" :items="sales_cart" :single-select="singleSelect" :items_per_page="items_per_page" :dialogShowprop="dialogShowprop" :loading="isLoading" :cart_name="cart_name" />
+                                <Cart :headers="headers" :items="deliveries_cart" :single-select="singleSelect" :items_per_page="items_per_page" :dialogShowprop="dialogShowprop" :loading="isLoading" :cart_name="cart_name" />
                             </v-container>
                         </v-flex>
                         <v-flex xs6 md3 class="is-radiusless">
@@ -98,13 +98,14 @@ export default {
         return {
             tab: null,
             tabs: [
-                { name: 'Sales', path: '/sales/sale' }, { name: 'Items', path: '/sales/items' }
+                { name: 'Delivery', path: '/inventory/delivery/add' }, { name: 'Items', path: '/inventory/delivery/add/items' }
             ],
             snack: false,
             snackColor: '',
             snackText: '',
-            cart_name: 'sales_cart',
-            sales_cart: [],
+            cart_name: 'deliveries_cart',
+            cart_price: 0,
+            deliveries_cart: [],
             show_select: true,
             singleSelect: false,
             selected: [],
@@ -120,12 +121,11 @@ export default {
                 { text: 'Price', value: 'price', sortable: false },
                 { text: 'Total Price', value: 'total_price', sortable: false }
             ],
-            sale_cart_data: []
         }
     },
     mounted() {
         this.$store.dispatch('retrieveRegister')
-        if (localStorage.getItem('sales_cart')) this.sales_cart = JSON.parse(localStorage.getItem(this.cart_name));
+        if (localStorage.getItem('deliveries_cart')) this.deliveries_cart = JSON.parse(localStorage.getItem(this.cart_name));
 
     },
     computed: {
@@ -133,22 +133,22 @@ export default {
             retrieveRegister: 'retrieveRegister',
             isLoading: 'isLoading'
         }),
-        cart_price: function() {
-            return this.total_cart_price()
-        },
+        // cart_price: function() {
+        //     return this.total_cart_price()
+        // },
+        // mix this into the outer object with the object spread operator
         ...mapState([
             'isLoading'
         ])
     },
     methods: {
         complete_sale() {
-            this.$store.dispatch('storeSalesItem', {
-                    register_id: this.retrieveRegister.id,
-                    items: this.sales_cart
+            this.$store.dispatch('storeDeliveriesItem', {
+                    items: this.deliveries_cart
                 })
                 .then(data => {
-                    this.sales_cart = []
-                    localStorage.removeItem('sales_cart')
+                    this.deliveries_cart = []
+                    localStorage.removeItem('deliveries_cart')
                     this.snack = true
                     this.snackColor = 'success'
                     this.snackText = 'Data saved'
@@ -162,7 +162,7 @@ export default {
         },
         total_cart_price() {
             let total_price = 0
-            this.sales_cart.map(function(value, key) {
+            this.deliveries_cart.map(function(value, key) {
                 total_price += value.price * value.cart_quantity
             });
             return total_price

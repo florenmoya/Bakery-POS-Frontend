@@ -1,17 +1,27 @@
 <template>
-    <v-container>
-        <div class="ma-2"> Sales
-            <hr>
+    <v-container v-if="!isLoading">
+        <div v-if="!retrieveRegister.active">
+            <div class="ma-2"> Registers
+                <hr>
+            </div>
+            <ButtonList :button_list="register_inactive_button" />
         </div>
-        <ButtonList :button_list="sales_button" />
-        <div class="ma-2"> Registers
-            <hr>
+        <div v-if="retrieveRegister.active">
+            <div class="ma-2"> Sales
+                <hr>
+            </div>
+            <ButtonList :button_list="sales_button" />
+            <div class="ma-2"> Registers
+                <hr>
+            </div>
+            <ButtonList :button_list="register_button" />
         </div>
-        <ButtonList :button_list="register_button" />
     </v-container>
 </template>
 <script>
 import ButtonList from '../components/ButtonList'
+import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
     components: {
@@ -32,7 +42,8 @@ export default {
             }],
             register_button: [{
                 name: 'Close Register',
-                icon: 'settings_power'
+                icon: 'settings_power',
+                path: 'sales/register/close'
             }, {
                 name: 'Payout/Drop',
                 icon: 'remove'
@@ -40,8 +51,20 @@ export default {
                 name: 'Add Amount',
                 icon: 'add'
             }],
+            register_inactive_button: [{
+                name: 'Register',
+                icon: 'money',
+                path: 'sales/register'
+            }],
         }
-    }
+    },
+    mounted() {
+        this.$store.dispatch('retrieveRegister')
+    },
+    computed: mapGetters({
+        retrieveRegister: 'retrieveRegister',
+        isLoading: 'isLoading'
+    }),
 }
 
 </script>

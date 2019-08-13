@@ -1,23 +1,42 @@
 <template>
-    <DataTableCrud :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name"/>
+    <v-container>
+        <v-card>
+            <v-tabs v-model="tab">
+                <v-tab v-for="tab in tabs" :key="tab.index" :to="tab.path">
+                    {{ tab.name }}
+                </v-tab>
+                <v-spacer></v-spacer>
+                <v-tab-item v-for="tab in tabs" :key="tab.index" :id="tab.path">
+                    <router-view v-if="tab === tab.path" />
+                </v-tab-item>
+            </v-tabs>
+            <DataTableCrudCart :search="search" :headers="headers" :items="items" :dialogprop="dialog" :editedIndexprop="editedIndex" :editItems="editItems" :editedItemprop="editedItem" :single-select="singleSelect" :selectedprop="deliveries_cart" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :show_select="show_select" :dialogShowprop="dialogShowprop" :loading="isLoading" :cart_name="cart_name" />
+        </v-card>
+    </v-container>
 </template>
 <script>
-import DataTableCrud from '../components/DataTableCrud'
+import DataTableCrudCart from '../components/DataTableCrudCart';
 import { mapState } from 'vuex'
-
-const axios = require('axios')
 
 export default {
     components: {
-        DataTableCrud
+        DataTableCrudCart
     },
     data() {
         return {
+            tab: null,
+            tabs: [
+                { name: 'Delivery', path: '/inventory/delivery/add' }, { name: 'Items', path: '/inventory/delivery/add/items' }
+            ],
+            // DataTableCrud
+            cart_name: 'deliveries_cart',
+            show_select: true,
+            deliveries_cart: [],
+            singleSelect: false,
             sortby: 'description',
-            link_name: 'Items_Add',
             items_per_page: 20,
             dialog: false,
-            dialogShow: [],
+            dialogShowprop: false,
             search: '',
             headers: [
                 { text: 'Description', value: 'description' },
@@ -55,18 +74,16 @@ export default {
                 item_cost: 0,
                 notes: ''
             },
+            // --
         }
     },
-
     mounted() {
         this.$store.dispatch('retrieveItems')
         this.isLoaded = true;
     },
-
     computed: mapState([
         'items', 'isLoading'
     ]),
-
     methods: {
         destroyItem() {
             this.$store.dispatch('destroyItem', {
@@ -114,6 +131,6 @@ export default {
                 .then(items.push(editedItem))
         }
     }
-};
+}
 
 </script>

@@ -24,13 +24,13 @@ export default {
     methods: {
         login() {
             if (this.$refs.form.validate()) {
-              this.$store.dispatch('retrieveToken',{
-                username: this.username,
-                password: this.password
-              })
-              .then(response =>{
-                this.$router.push({name: 'Items'})
-              })
+                this.$store.dispatch('retrieveToken', {
+                        username: this.username,
+                        password: this.password
+                    })
+                    .then(response => {
+                        this.$router.push({ name: 'Items' })
+                    })
             }
         }
     },
