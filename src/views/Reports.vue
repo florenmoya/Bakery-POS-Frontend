@@ -22,7 +22,7 @@ export default {
             sales_buttons: [{
                 name: 'Today',
                 icon: 'search',
-                path: '/inventory/item'
+                path: '/reports/sales'
             }, {
                 name: 'Closing Counts',
                 icon: 'close',

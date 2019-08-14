@@ -12,6 +12,7 @@ export default new Vuex.Store({
         token: localStorage.getItem('access_token') || null,
         username: localStorage.getItem('username') || null,
         items: [],
+        SalesItems: [],
         register: JSON.parse(localStorage.getItem('register')) || null,
         categories: [],
         isLoading: false
@@ -42,6 +43,9 @@ export default new Vuex.Store({
         },
         retrieveUsername(state, username) {
             state.username = username
+        },
+        retrieveSalesItem(state, data) {
+            state.SalesItems = data
         },
         retrieveItems(state, data) {
             state.items = data
@@ -206,6 +210,22 @@ export default new Vuex.Store({
                         items: data.items
                     })
                     .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
+        retrieveSalesItem(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('http://localhost:8001/api/reports/sales')
+                    .then(function(response) {
+                        context.commit('retrieveSalesItem', response.data)
+                        context.commit('isLoading')
                         resolve(response);
                     })
                     .catch(function(error) {

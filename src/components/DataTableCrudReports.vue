@@ -1,8 +1,8 @@
 <template>
-    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="loading">
+    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="loading" :custom-filter="filterOnlyCapsText">
         <template v-slot:top>
             <v-toolbar flat color="white">
-                <v-toolbar-title>Items</v-toolbar-title>
+                <v-toolbar-title>{{title}}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details class="mr-10"></v-text-field>
                 <v-dialog v-model="dialog" max-width="500px" v-if="">
@@ -48,7 +48,7 @@
 const axios = require('axios')
 
 export default {
-    props: ['headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'editItems', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'cart_name', 'link_name'],
+    props: ['title', 'headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'editItems', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'cart_name', 'link_name'],
     data() {
         return {
             search: '',
@@ -79,6 +79,12 @@ export default {
         }
     },
     methods: {
+        filterOnlyCapsText(value, search, item) {
+            return value != null &&
+                search != null &&
+                typeof value === 'string' &&
+                value.toString().indexOf(search) !== -1
+        },
         initialize() {
             this.items = this.items
         },
