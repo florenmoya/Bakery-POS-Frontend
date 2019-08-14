@@ -34,7 +34,7 @@ export default {
             }, {
                 name: 'Total Deliveries',
                 icon: 'note',
-                path: '/inventory/categories'
+                path: '/reports/Deliveries'
             }]
         }
     }

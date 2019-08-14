@@ -51,6 +51,18 @@ export default new Router({
                 import( /* webpackChunkName: "about" */ "./views/Reports_Sales_Today.vue")
         },
         {
+            path: "/reports/deliveries",
+            name: "Reports_Deliveries",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Reports_Deliveries.vue")
+        },
+        {
             path: "/settings",
             name: "Settings",
             meta: {
