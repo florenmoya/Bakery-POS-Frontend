@@ -32,7 +32,7 @@ export default {
             // DataTableCrud
             cart_name: 'sales_cart',
             show_select: true,
-            sales_cart: [],
+            sales_cart: JSON.parse(localStorage.getItem('sales_cart')) || null,
             singleSelect: false,
             sortby: 'description',
             items_per_page: 20,

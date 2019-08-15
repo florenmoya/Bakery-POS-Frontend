@@ -48,7 +48,7 @@
 const axios = require('axios')
 
 export default {
-    props: ['headers', 'items', 'dialogprop', 'editedIndexprop', 'editedItemprop', 'defaultItem', 'editItems', 'items_per_page', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'cart_name', 'link_name'],
+    props: ['headers', 'items', 'dialogprop', 'editedIndexprop', 'editedItemprop', 'defaultItem', 'editItems', 'items_per_page','selectedprop', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'cart_name', 'link_name'],
     data() {
         return {
             search: '',
