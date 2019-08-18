@@ -63,6 +63,18 @@ export default new Router({
                 import( /* webpackChunkName: "about" */ "./views/Reports_Deliveries.vue")
         },
         {
+            path: "/reports/closing_counts",
+            name: "Reports_Closing_Counts",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Reports_Closing_Counts.vue")
+        },
+        {
             path: "/settings",
             name: "Settings",
             meta: {
@@ -193,6 +205,33 @@ export default new Router({
             },
             component: () =>
                 import( /* webpackChunkName: "about" */ "./views/Inventory_Delivery_Add_Items.vue")
+        },
+        {
+            path: "/sales/refunds/add",
+            name: "Refunds_Add",
+            meta: {
+                requiresAuth: true
+            },
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Sales_Refunds_Add.vue")
+        },
+        {
+            path: "/sales/refunds/add/items",
+            name: "Refunds_Add_Items",
+            meta: {
+                requiresAuth: true
+            },
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Sales_Refunds_Add_Items.vue")
+        },
+        {
+            path: "/print",
+            name: "Print",
+            meta: {
+                requiresAuth: true
+            },
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Print.vue")
         },
         {
             path: "/login",

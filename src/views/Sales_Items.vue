@@ -43,8 +43,7 @@ export default {
                 { text: 'Description', value: 'description' },
                 { text: 'QTY', value: 'quantity' },
                 { text: 'Price', value: 'price' },
-                { text: 'Category', value: 'category' },
-                { text: 'Actions', value: 'action', sortable: false }
+                { text: 'Category', value: 'category.title' },
 
             ],
             editedIndex: -1,

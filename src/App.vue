@@ -1,6 +1,6 @@
 <template>
     <v-app id="inspire">
-        <v-navigation-drawer v-if="loggedIn" v-model="drawer" app clipped>
+        <v-navigation-drawer class="d-print-none" v-if="loggedIn" v-model="drawer" app clipped>
             <v-list dense>
                 <v-list-item @click="" v-for="item in menuItems" :key="item.title" :to="item.path">
                     <v-list-item-action>
@@ -12,7 +12,7 @@
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
-        <v-app-bar v-if="loggedIn" app clipped-left>
+        <v-app-bar class="d-print-none" v-if="loggedIn" app clipped-left>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>{{this.$route.name }}</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -37,7 +37,7 @@
         <v-content>
             <router-view></router-view>
         </v-content>
-        <v-footer app>
+        <v-footer class="d-print-none"  app>
             <span>&copy; Moya's Bakery</span>
         </v-footer>
     </v-app>

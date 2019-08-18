@@ -14,12 +14,30 @@
                             <span class="headline">{{ formTitle }}</span>
                         </v-card-title>
                         <v-card-text>
-                            <v-container grid-list-md>
-                                <v-layout wrap>
-                                    <v-flex xs12 sm6 md4 v-for="n in editItems.length">
-                                        <v-text-field v-model="editedItem[editItems[n-1].name]" v-bind:label="editItems[n-1].name"></v-text-field>
-                                    </v-flex>
-                                </v-layout>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.quantity" label="Quantity"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.price" label="Price"></v-text-field>
+                                    </v-col>
+                                    <v-col class="d-flex" sm="6" md="4">
+                                        <v-select :items="categories" v-model="editedItem.category_id" item-value="id" item-text="title" label="Category"></v-select>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.type" label="Type"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.item_cost" label="Item Cost"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field v-model="editedItem.notes" label="Note"></v-text-field>
+                                    </v-col>
+                                </v-row>
                             </v-container>
                         </v-card-text>
                         <v-card-actions>
@@ -46,32 +64,21 @@
 </template>
 <script>
 const axios = require('axios')
+import { mapState } from 'vuex'
 
 export default {
-    props: ['headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'editItems', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'cart_name', 'link_name'],
+    props: ['headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'cart_name', 'link_name'],
     data() {
         return {
             search: '',
             dialog: this.dialog_prop,
             editedItem: this.editedItem_prop,
-            editedIndex: this.editedIndex_prop
+            editedIndex: this.editedIndex_prop,
+            errors: [],
         }
-    },
-    computed: {
-        formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-        }
-    },
-
-    watch: {
-        dialog(val) {
-            val || this.close()
-        }
-    },
-    created() {
-        this.initialize()
     },
     mounted() {
+        this.$store.dispatch('retrieveCategories')
         if (this.$router.history.current.name == this.link_name) {
             this.dialog = true
         } else {
@@ -79,13 +86,15 @@ export default {
         }
     },
     methods: {
+        validate(text) {
+            return false;
+        },
         initialize() {
             this.items = this.items
         },
-
         editItem(item) {
+            console.log(item)
             this.editedIndex = this.items.indexOf(item)
-            console.log(this.editedIndex)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
@@ -110,7 +119,23 @@ export default {
                 this.$parent.create(this.items, this.editedItem);
             }
             this.close()
+        }
+    },
+    created() {
+        this.initialize()
+    },
+    watch: {
+        dialog(val) {
+            val || this.close()
+        }
+    },
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
         },
+        ...mapState([
+            'categories'
+        ])
     },
 }
 

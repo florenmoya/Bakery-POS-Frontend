@@ -148,7 +148,7 @@ export default {
                 })
                 .then(data => {
                     this.sales_cart = []
-                    localStorage.removeItem('sales_cart')
+                    localStorage.setItem(this.cart_name, '[]') 
                     this.snack = true
                     this.snackColor = 'success'
                     this.snackText = 'Data saved'

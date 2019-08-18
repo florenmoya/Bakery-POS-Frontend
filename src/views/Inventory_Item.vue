@@ -1,5 +1,11 @@
 <template>
-    <DataTableCrud :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name"/>
+    <div>
+        <DataTableCrud :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" />
+        <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+            {{ snackText }}
+            <v-btn text @click="snack = false">Close</v-btn>
+        </v-snackbar>
+    </div>
 </template>
 <script>
 import DataTableCrud from '../components/DataTableCrud'
@@ -18,12 +24,15 @@ export default {
             items_per_page: 20,
             dialog: false,
             dialogShow: [],
+            snack: false,
+            snackColor: '',
+            snackText: '',
             search: '',
             headers: [
                 { text: 'Description', value: 'description' },
                 { text: 'QTY', value: 'quantity' },
                 { text: 'Price', value: 'price' },
-                { text: 'Category', value: 'category' },
+                { text: 'Category', value: 'category.title' },
                 { text: 'Actions', value: 'action', sortable: false }
 
             ],
@@ -32,25 +41,16 @@ export default {
                 description: '',
                 quantity: 0,
                 price: 0,
-                category: 0,
+                category_id: 0,
                 type: 0,
                 item_cost: 0,
                 notes: ''
             },
-            editItems: [
-                { name: 'description' },
-                { name: 'quantity' },
-                { name: 'price' },
-                { name: 'category' },
-                { name: 'type' },
-                { name: 'item_cost' },
-                { name: 'notes' }
-            ],
             defaultItem: {
                 description: '',
                 quantity: 0,
                 price: 0,
-                category: 0,
+                category_id: 0,
                 type: 0,
                 item_cost: 0,
                 notes: ''
@@ -63,10 +63,11 @@ export default {
         this.isLoaded = true;
     },
 
-    computed: mapState([
-        'items', 'isLoading'
-    ]),
-
+    computed: {
+        ...mapState([
+            'items', 'isLoading'
+        ]),
+    },
     methods: {
         destroyItem() {
             this.$store.dispatch('destroyItem', {
@@ -74,7 +75,16 @@ export default {
                 })
                 .then(response => {
                     this.$router.push({ name: 'Items' })
+                    this.snack = true
+                    this.snackColor = 'success'
+                    this.snackText = 'Data saved'
                 })
+                .catch(error => {
+                    this.snack = true
+                    this.snackColor = 'error'
+                    this.snackText = 'Error Please Try Again'
+                    console.log(error.response)
+                });
         },
         deleteItem(item) {
             const index = this.items.indexOf(item)
@@ -85,33 +95,64 @@ export default {
                     })
                     .then(response => {
                         this.items.splice(index, 1)
+                        this.snack = true
+                        this.snackColor = 'success'
+                        this.snackText = 'Data saved'
                     })
+                    .catch(error => {
+                        this.snack = true
+                        this.snackColor = 'error'
+                        this.snackText = 'Error Please Try Again'
+                        console.log(error.response)
+                    });
             }
         },
         update(item, editedItem) {
-            this.$store.dispatch('updateItem', {
-                    id: editedItem.id,
-                    description: editedItem.description,
-                    quantity: editedItem.quantity,
-                    category: editedItem.category,
-                    price: editedItem.price,
-                    type: editedItem.type,
-                    item_cost: editedItem.item_cost,
-                    notes: editedItem.notes
-                })
-                .then(Object.assign(item, editedItem))
+                this.$store.dispatch('updateItem', {
+                        id: editedItem.id,
+                        description: editedItem.description,
+                        quantity: editedItem.quantity,
+                        category_id: editedItem.category_id,
+                        price: editedItem.price,
+                        type: editedItem.type,
+                        item_cost: editedItem.item_cost,
+                        notes: editedItem.notes
+                    })
+                    .then(response => {
+                        this.$store.dispatch('retrieveItems')
+                        this.snack = true
+                        this.snackColor = 'success'
+                        this.snackText = 'Data saved'
+                    })
+                    .catch(error => {
+                        this.snack = true
+                        this.snackColor = 'error'
+                        this.snackText = 'Error Please Try Again'
+                        console.log(error.response)
+                    });
         },
         create(items, editedItem) {
             this.$store.dispatch('storeItem', {
                     description: editedItem.description,
                     quantity: editedItem.quantity,
-                    category: editedItem.category,
+                    category_id: editedItem.category_id,
                     price: editedItem.price,
                     type: editedItem.type,
                     item_cost: editedItem.item_cost,
                     notes: editedItem.notes
                 })
-                .then(items.push(editedItem))
+                .then(response => {
+                    this.$store.dispatch('retrieveItems')
+                    this.snack = true
+                    this.snackColor = 'success'
+                    this.snackText = 'Data saved'
+                })
+                .catch(error => {
+                    this.snack = true
+                    this.snackColor = 'error'
+                    this.snackText = 'Error Please Try Again'
+                    console.log(error.response)
+                });
         }
     }
 };

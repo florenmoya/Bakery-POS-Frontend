@@ -26,7 +26,7 @@ export default {
             }, {
                 name: 'Closing Counts',
                 icon: 'close',
-                path: '/inventory/item/add'
+                path: '/reports/closing_counts'
             }],
             register_buttons: [{
                 name: 'Inventory',

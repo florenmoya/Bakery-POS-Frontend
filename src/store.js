@@ -14,6 +14,8 @@ export default new Vuex.Store({
         items: [],
         SalesItems: [],
         register: JSON.parse(localStorage.getItem('register')) || null,
+        deliveries: [],
+        closingcounts: [],
         categories: [],
         isLoading: false
     },
@@ -49,6 +51,12 @@ export default new Vuex.Store({
         },
         retrieveItems(state, data) {
             state.items = data
+        },
+        retrieveDeliveries(state, data) {
+            state.deliveries = data
+        },
+        retrieveClosingCounts(state, data) {
+            state.closingcounts = data
         },
         retrieveRegister(state, data) {
             state.register = data
@@ -203,6 +211,21 @@ export default new Vuex.Store({
                     });
             })
         },
+        storeRefundsItem(context, data) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/refunds', {
+                        items: data.items
+                    })
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
         storeDeliveriesItem(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -250,6 +273,38 @@ export default new Vuex.Store({
                     });
             })
         },
+        retrieveDeliveries(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/deliveries')
+                    .then(function(response) {
+                        context.commit('retrieveDeliveries', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
+        retrieveClosingCounts(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/closing_counts')
+                    .then(function(response) {
+                        context.commit('retrieveClosingCounts', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
         storeItem(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -257,7 +312,7 @@ export default new Vuex.Store({
                         id: data.id,
                         description: data.description,
                         quantity: data.quantity,
-                        category: data.category,
+                        category_id: data.category_id,
                         price: data.price,
                         type: data.type,
                         item_cost: data.item_cost,
@@ -279,7 +334,7 @@ export default new Vuex.Store({
                         id: data.id,
                         description: data.description,
                         quantity: data.quantity,
-                        category: data.category,
+                        category_id: data.category_id,
                         price: data.price,
                         type: data.type,
                         item_cost: data.item_cost,

@@ -44,7 +44,6 @@ export default {
                 { text: 'Price', value: 'price' },
                 { text: 'Category', value: 'category' },
                 { text: 'Actions', value: 'action', sortable: false }
-
             ],
             editedIndex: -1,
             editedItem: {

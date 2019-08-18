@@ -35,7 +35,8 @@ export default {
                 path: 'sales/sale'
             }, {
                 name: 'Refund',
-                icon: 'money_off'
+                icon: 'money_off',
+                path: 'sales/refunds/add'
             }, {
                 name: 'New Sale',
                 icon: 'fiber_new'

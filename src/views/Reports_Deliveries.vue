@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DataTableCrudReports :headers="headers" :items="SalesItems" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" :date_to="date_from" :date_from="date_to" :title="title"/>
+        <DataTableCrudReports :headers="headers" :items="deliveries" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" :date_to="date_from" :date_from="date_to" :title="title"/>
     </div>
 </template>
 <style scoped>
@@ -42,8 +42,8 @@ export default {
             dialogShow: [],
             headers: [
                 { text: 'Description', value: 'item.description' },
-                { text: 'QTY', value: 'quantity' },
-                { text: 'Price', value: 'price' },
+                { text: 'QTY', value: 'total_quantity' },
+                { text: 'Price', value: 'total_price' },
                 { text: 'Category', value: 'item.category' }
             ],
             editedIndex: -1,
@@ -78,7 +78,7 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch('retrieveSalesItem')
+        this.$store.dispatch('retrieveDeliveries')
         this.isLoaded = true;
     },
 
@@ -90,13 +90,8 @@ export default {
             return this.date_to ? moment(this.date_to).format('dddd, MMMM Do YYYY') : ''
         },
         ...mapState([
-            'SalesItems', 'isLoading'
+            'deliveries', 'isLoading'
         ]),
-    },
-    updated() {
-        console.log(this.date_from_computed)
-        console.log(this.time_from)
-
     },
 };
 

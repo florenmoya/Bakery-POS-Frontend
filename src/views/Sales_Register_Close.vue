@@ -1,28 +1,34 @@
 <template>
-    <v-container fluid>
-        <v-card>
-            <v-layout justify-space-between>
-                <v-flex xs6 md6>
-                    <v-container>
-                        <v-layout column>
-                            <v-form ref="form">
-                                <v-text-field v-model="amount" label="Closing Amount" required></v-text-field>
-                                <v-btn @click="submit_register()" color="white" class="mr-4">
-                                    Submit
-                                </v-btn>
-                            </v-form>
-                        </v-layout>
-                    </v-container>
-                </v-flex>
-                <v-flex xs6 md6 class="is-radiusless">
-                    <v-container class="bg-white is-fullheight">
+    <div>
+        <Print />
+        <v-container class="d-print-none" fluid>
+            <v-card>
+                <v-layout justify-space-between>
+                    <v-flex xs6 md6>
                         <v-container>
+                            <v-layout column>
+                                <v-form ref="form">
+                                    <v-text-field v-model="amount" label="Closing Amount" required></v-text-field>
+                                    <v-btn @click="submit_register()" color="white" class="mr-4">
+                                        Submit
+                                    </v-btn>
+                                    <v-btn @click="print()" color="white" class="mr-4">
+                                        Print Inventory
+                                    </v-btn>
+                                </v-form>
+                            </v-layout>
                         </v-container>
-                    </v-container>
-                </v-flex>
-            </v-layout>
-        </v-card>
-    </v-container>
+                    </v-flex>
+                    <v-flex xs6 md6 class="is-radiusless">
+                        <v-container class="bg-white is-fullheight">
+                            <v-container>
+                            </v-container>
+                        </v-container>
+                    </v-flex>
+                </v-layout>
+            </v-card>
+        </v-container>
+    </div>
 </template>
 <style scoped>
 .is-center {
@@ -41,9 +47,14 @@
 
 </style>
 <script>
+import Print from '../components/Print';
+
 import { mapState } from 'vuex'
 
 export default {
+    components: {
+        Print
+    },
     data() {
         return {
             amount: 0,
@@ -63,6 +74,10 @@ export default {
                 .then(response => {
                     this.$router.push({ name: 'Sales' })
                 })
+        },
+        print() {
+
+            window.print()
         }
     }
 }
