@@ -33,9 +33,6 @@ export default {
                 path: '/inventory/item/add'
             }],
             register_buttons: [{
-                name: 'Counts',
-                icon: 'playlist_add_check'
-            }, {
                 name: 'Categories',
                 icon: 'note',
                 path: '/inventory/categories'

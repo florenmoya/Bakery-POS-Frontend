@@ -37,9 +37,6 @@ export default {
                 name: 'Refund',
                 icon: 'money_off',
                 path: 'sales/refunds/add'
-            }, {
-                name: 'New Sale',
-                icon: 'fiber_new'
             }],
             register_button: [{
                 name: 'Close Register',
@@ -48,9 +45,6 @@ export default {
             }, {
                 name: 'Payout/Drop',
                 icon: 'remove'
-            }, {
-                name: 'Add Amount',
-                icon: 'add'
             }],
             register_inactive_button: [{
                 name: 'Register',

@@ -15,7 +15,7 @@
                         </v-card-title>
                         <v-card-text>
                             <v-container>
-                                <v-row>
+                                <v-row v-if="link_name != 'Categories_Add'">
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
                                     </v-col>
@@ -38,6 +38,10 @@
                                         <v-text-field v-model="editedItem.notes" label="Note"></v-text-field>
                                     </v-col>
                                 </v-row>
+                                <v-flex xs12 sm6 md4 v-for="n in editItems.length" 
+                                v-else-if="link_name == 'Categories_Add'">
+                                    <v-text-field v-model="editedItem[editItems[n-1].name]" v-bind:label="editItems[n-1].name"></v-text-field>
+                                </v-flex>
                             </v-container>
                         </v-card-text>
                         <v-card-actions>
@@ -67,12 +71,13 @@ const axios = require('axios')
 import { mapState } from 'vuex'
 
 export default {
-    props: ['headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'cart_name', 'link_name'],
+    props: ['headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'cart_name', 'link_name', 'editItems_prop'],
     data() {
         return {
             search: '',
             dialog: this.dialog_prop,
             editedItem: this.editedItem_prop,
+            editItems: this.editItems_prop,
             editedIndex: this.editedIndex_prop,
             errors: [],
         }

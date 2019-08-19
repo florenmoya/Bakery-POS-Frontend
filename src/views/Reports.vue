@@ -29,9 +29,6 @@ export default {
                 path: '/reports/closing_counts'
             }],
             register_buttons: [{
-                name: 'Inventory',
-                icon: 'playlist_add_check'
-            }, {
                 name: 'Total Deliveries',
                 icon: 'note',
                 path: '/reports/Deliveries'
