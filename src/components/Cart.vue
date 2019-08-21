@@ -13,7 +13,7 @@
                 <v-icon @click="minusItem(props.item)">
                     remove
                 </v-icon>
-                <v-edit-dialog class="is-inline" :return-value.sync="props.item.quantity" large persistent @save="save(props.item)" @cancel="cancel" @open="open" @close="close">
+                <v-edit-dialog class="is-inline" :return-value.sync="props.item.quantity" large persistent @save="save(props.item)" @open="open">
                     {{ props.item.cart_quantity }}
                     <template v-slot:input>
                         <div class="mt-4 title">Update Quantity</div>
@@ -44,7 +44,6 @@ export default {
             snack: false,
             snackColor: '',
             snackText: '',
-
         }
     },
     computed: {
@@ -52,19 +51,12 @@ export default {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
         },
     },
-    updated() {
-        this.dialog = this.dialogShowprop
-    },
     methods: {
         addItem(item) {
             const index = this.items.indexOf(item)
             item.cart_quantity += 1
             Object.assign(this.items[index], item)
             localStorage.setItem(this.cart_name, JSON.stringify(this.items));
-
-            this.snack = true
-            this.snackColor = 'success'
-            this.snackText = 'Data saved'
         },
         minusItem(item) {
             if (item.cart_quantity > 0) {
@@ -72,14 +64,10 @@ export default {
                 item.cart_quantity -= 1
                 Object.assign(this.items[index], item)
                 localStorage.setItem(this.cart_name, JSON.stringify(this.items));
-
-                this.snack = true
-                this.snackColor = 'success'
-                this.snackText = 'Data saved'
             }
         },
         save(item) {
-            console.log(item)
+            item.cart_quantity = parseInt(item.cart_quantity)
             const index = this.items.indexOf(item)
             item.total_price = item.price * item.cart_quantity
             Object.assign(this.items[index], item)
@@ -87,35 +75,26 @@ export default {
 
             this.snack = true
             this.snackColor = 'success'
-            this.snackText = 'Data saved'
-        },
-
-        cancel() {
-            this.snack = true
-            this.snackColor = 'error'
-            this.snackText = 'Canceled'
+            this.snackText = 'Completed'
         },
         open(item) {
             const editedIndex = this.items.indexOf(item)
-            // console.log(this.items[editedIndex].description)
-            this.snack = true
-            this.snackColor = 'info'
-            this.snackText = 'Dialog opened'
-        },
-        close() {
-            console.log('Dialog closed')
         },
         deleteItem(item) {
             const index = this.items.indexOf(item)
             Vue.delete(this.items, [index])
             localStorage.setItem(this.cart_name, JSON.stringify(this.items.filter(x => x)));
+            this.snack = true
+            this.snackColor = 'warning'
+            this.snackText = 'Item Removed'
         },
     },
 }
 
 </script>
 <style scoped>
-.is-inline{
+.is-inline {
     display: inline;
 }
+
 </style>

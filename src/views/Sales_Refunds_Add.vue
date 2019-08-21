@@ -51,7 +51,7 @@
                                     </v-layout>
                                 </v-container>
                                 <v-container class="is-center">
-                                    <v-btn class="ma-2" tile color="darken-1" @click="complete_sale()" dark>Submit Sale</v-btn>
+                                    <v-btn class="ma-2" tile color="darken-1" @click="complete_sale()" :disabled="isLoading" dark>Submit Refund</v-btn>
                                 </v-container>
                             </v-container>
                         </v-flex>

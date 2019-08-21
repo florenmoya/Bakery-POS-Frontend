@@ -51,7 +51,7 @@
                                     </v-layout>
                                 </v-container>
                                 <v-container class="is-center">
-                                    <v-btn class="ma-2" tile color="darken-1" @click="complete_sale()" dark>Submit Sale</v-btn>
+                                    <v-btn class="ma-2" tile color="darken-1" @click="complete_sale()" :disabled="isLoading" dark>Submit Sale</v-btn>
                                 </v-container>
                             </v-container>
                         </v-flex>
@@ -149,7 +149,7 @@ export default {
                 })
                 .then(data => {
                     this.sales_cart = []
-                    localStorage.setItem(this.cart_name, '[]') 
+                    localStorage.setItem(this.cart_name, '[]')
                     this.snack = true
                     this.snackColor = 'success'
                     this.snackText = 'Data saved'

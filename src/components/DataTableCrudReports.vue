@@ -1,5 +1,5 @@
 <template>
-    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="loading" multi-sort>
+    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :sort-desc="sortdesc" :loading="loading" multi-sort>
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>{{title}}</v-toolbar-title>
@@ -22,10 +22,12 @@
     </v-data-table>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 const axios = require('axios')
 
 export default {
-    props: ['title', 'headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'editItems', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'cart_name', 'link_name'],
+    props: ['title', 'headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'editItems', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'sortdesc', 'cart_name', 'link_name'],
     data() {
         return {
             search: '',
@@ -37,7 +39,10 @@ export default {
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-        }
+        },
+        ...mapState([
+            'isLoading'
+        ]),
     },
 
     watch: {

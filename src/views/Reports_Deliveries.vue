@@ -36,7 +36,8 @@ export default {
             //datatable
             title: 'Deliveries',
             sortby: ['category_id', 'quantity'],
-            sortdesc: [false, true],            link_name: 'Items_Add',
+            sortdesc: [false, true],
+            link_name: 'Items_Add',
             items_per_page: 20,
             dialog: false,
             dialogShow: [],

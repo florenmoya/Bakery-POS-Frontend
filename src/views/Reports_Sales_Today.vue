@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DataTableCrudReports :headers="headers" :items="SalesItems" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" :date_to="date_from" :date_from="date_to" :title="title"/>
+        <DataTableCrudReports :headers="headers" :items="SalesItems" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :link_name="link_name" :title="title"/>
     </div>
 </template>
 <style scoped>
@@ -23,25 +23,15 @@ export default {
     },
     data() {
         return {
-            //datetime
-            time_from: '7:00',
-            time_to: '7:00',
-            date_from: new Date((new Date()).valueOf() - 1000 * 60 * 60 * 24 * 1).toISOString().substr(0, 10),
-            date_to: new Date().toISOString().substr(0, 10),
-            menu1: false,
-            menu2: false,
-            menu3: false,
-            menu4: false,
-            modal4: false,
-            //datatable
             title: 'Sales',
-            sortby: ['category_id', 'quantity'],
-            sortdesc: [false, true],
+            sortby: ['created_at'],
+            sortdesc: [true],
             link_name: 'Items_Add',
             items_per_page: 20,
             dialog: false,
             dialogShow: [],
             headers: [
+                { text: 'Date', value: 'created_at' },
                 { text: 'Description', value: 'item.description' },
                 { text: 'QTY', value: 'quantity' },
                 { text: 'Price', value: 'price' },
@@ -80,25 +70,13 @@ export default {
 
     mounted() {
         this.$store.dispatch('retrieveSalesItem')
-        this.isLoaded = true;
     },
 
     computed: {
-        date_from_computed() {
-            return this.date_from ? moment(this.date_from).format('dddd, MMMM Do YYYY') : ''
-        },
-        date_to_computed() {
-            return this.date_to ? moment(this.date_to).format('dddd, MMMM Do YYYY') : ''
-        },
         ...mapState([
-            'SalesItems', 'isLoading'
+            'SalesItems'
         ]),
-    },
-    updated() {
-        console.log(this.date_from_computed)
-        console.log(this.time_from)
-
-    },
+    }
 };
 
 </script>

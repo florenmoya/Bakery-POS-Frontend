@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DataTableCrud :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" />
+        <DataTableCrud :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :link_name="link_name" />
         <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
             {{ snackText }}
             <v-btn text @click="snack = false">Close</v-btn>
@@ -66,27 +66,10 @@ export default {
 
     computed: {
         ...mapState([
-            'items', 'isLoading'
+            'items'
         ]),
     },
     methods: {
-        destroyItem() {
-            this.$store.dispatch('destroyItem', {
-                    items_id: this.items_id
-                })
-                .then(response => {
-                    this.$router.push({ name: 'Items' })
-                    this.snack = true
-                    this.snackColor = 'success'
-                    this.snackText = 'Data saved'
-                })
-                .catch(error => {
-                    this.snack = true
-                    this.snackColor = 'error'
-                    this.snackText = 'Error Please Try Again'
-                    console.log(error.response)
-                });
-        },
         deleteItem(item) {
             const index = this.items.indexOf(item)
 
@@ -97,8 +80,8 @@ export default {
                     .then(response => {
                         this.items.splice(index, 1)
                         this.snack = true
-                        this.snackColor = 'success'
-                        this.snackText = 'Data saved'
+                        this.snackColor = 'warning'
+                        this.snackText = 'Item Removed'
                     })
                     .catch(error => {
                         this.snack = true
@@ -146,7 +129,7 @@ export default {
                     this.$store.dispatch('retrieveItems')
                     this.snack = true
                     this.snackColor = 'success'
-                    this.snackText = 'Data saved'
+                    this.snackText = 'Item added'
                 })
                 .catch(error => {
                     this.snack = true

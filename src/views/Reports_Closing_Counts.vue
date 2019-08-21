@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DataTableCrudReports :headers="headers" :items="closingcounts" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" :title="title" />
+        <DataTableCrudReports :headers="headers" :items="closingcounts" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :link_name="link_name" :title="title" />
     </div>
 </template>
 <style scoped>
@@ -13,6 +13,7 @@
 import moment from 'moment'
 
 import DataTableCrudReports from '../components/DataTableCrudReports'
+
 import { mapState } from 'vuex'
 
 const axios = require('axios')
@@ -23,14 +24,9 @@ export default {
     },
     data() {
         return {
-            menu1: false,
-            menu2: false,
-            menu3: false,
-            menu4: false,
-            modal4: false,
-            //datatable
             title: 'Closing Counts',
-            sortby: 'created_at',
+            sortby: ['created_at'],
+            sortdesc: [true],
             link_name: 'Items_Add',
             items_per_page: 20,
             dialog: false,
@@ -95,7 +91,7 @@ export default {
             }, 0)
         },
         ...mapState([
-            'closingcounts', 'isLoading'
+            'closingcounts'
         ]),
     }
 };

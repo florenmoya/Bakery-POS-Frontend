@@ -2,6 +2,11 @@
     <v-container fluid>
         <v-card>
             <v-layout justify-space-between>
+                <v-container>
+                    {{currentTime}}
+                </v-container>
+            </v-layout>
+            <v-layout justify-space-between>
                 <v-flex xs6 md6>
                     <v-container>
                         <v-layout column>
@@ -17,6 +22,19 @@
                 <v-flex xs6 md6 class="is-radiusless">
                     <v-container class="bg-white is-fullheight">
                         <v-container>
+                            <v-card max-width="450">
+                                <v-progress-linear color="blue lighten-4" buffer-value="0" stream></v-progress-linear>
+                                <v-list-item three-line>
+                                    <v-list-item-content>
+                                        <div class="overline mb-1">{{loggedUser}}</div>
+                                        <v-list-item-title class="headline mb-1">Check Water</v-list-item-title>
+                                        <v-list-item-subtitle>When its empty, send a message on telegram.</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                    <v-list-item-avatar tile size="80" color="grey">
+                                        <v-img class="white--text" src="https://5.imimg.com/data5/QB/FL/MY-27577041/20-litre-mineral-water-jar-500x500.jpg" />
+                                    </v-list-item-avatar>
+                                </v-list-item>
+                            </v-card>
                         </v-container>
                     </v-container>
                 </v-flex>
@@ -41,19 +59,25 @@
 
 </style>
 <script>
-import { mapState } from 'vuex'
+import moment from 'moment'
+
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
         return {
             amount: 0,
+            currentTime: null
+
         }
     },
     mounted() {
 
     },
     computed: {
-
+        ...mapGetters({
+            loggedUser: 'loggedUser'
+        })
     },
     methods: {
         submit_register() {
@@ -63,7 +87,14 @@ export default {
                 .then(response => {
                     this.$router.push({ name: 'Sales' })
                 })
+        },
+        updateCurrentTime() {
+            this.currentTime = moment().format('LTS LL');
         }
+    },
+    created() {
+        this.currentTime = moment().format('LTS LL');
+        setInterval(() => this.updateCurrentTime(), 1 * 1000);
     }
 }
 
