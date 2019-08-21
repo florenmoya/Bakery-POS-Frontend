@@ -109,7 +109,8 @@ export default {
             show_select: true,
             singleSelect: false,
             selected: [],
-            sortby: 'description',
+            sortby: ['category_id', 'quantity'],
+            sortdesc: [false, true],
             items_per_page: 20,
             dialog: false,
             dialogShowprop: false,
@@ -148,7 +149,7 @@ export default {
                 })
                 .then(data => {
                     this.deliveries_cart = []
-                    localStorage.setItem(this.cart_name, '[]') 
+                    localStorage.setItem(this.cart_name, '[]')
                     this.snack = true
                     this.snackColor = 'success'
                     this.snackText = 'Data saved'

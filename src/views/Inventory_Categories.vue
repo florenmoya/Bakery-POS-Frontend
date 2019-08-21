@@ -31,7 +31,6 @@ export default {
             headers: [
                 { text: 'Name', value: 'title' },
                 { text: 'Actions', value: 'action', sortable: false }
-
             ],
             editedIndex: -1,
             editedItem: {
@@ -47,9 +46,7 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch('retrieveCategories')
         this.isLoaded = true;
-
     },
     computed: mapState([
         'categories', 'isLoading'
@@ -75,7 +72,6 @@ export default {
         },
         deleteItem(item) {
             const index = this.categories.indexOf(item)
-            console.log(this.categories[index].id)
 
             if (confirm('Are you sure you want to delete this item?')) {
                 this.$store.dispatch('deleteCategories', {

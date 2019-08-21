@@ -35,7 +35,8 @@ export default {
             modal4: false,
             //datatable
             title: 'Sales',
-            sortby: 'description',
+            sortby: ['category_id', 'quantity'],
+            sortdesc: [false, true],
             link_name: 'Items_Add',
             items_per_page: 20,
             dialog: false,

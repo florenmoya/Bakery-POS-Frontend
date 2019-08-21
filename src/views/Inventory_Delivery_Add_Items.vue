@@ -10,7 +10,7 @@
                     <router-view v-if="tab === tab.path" />
                 </v-tab-item>
             </v-tabs>
-            <DataTableCrudCart :search="search" :headers="headers" :items="items" :dialogprop="dialog" :editedIndexprop="editedIndex" :editItems="editItems" :editedItemprop="editedItem" :single-select="singleSelect" :selectedprop="deliveries_cart" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :show_select="show_select" :dialogShowprop="dialogShowprop" :loading="isLoading" :cart_name="cart_name" />
+            <DataTableCrudCart :search="search" :headers="headers" :items="items" :dialogprop="dialog" :editedIndexprop="editedIndex" :editItems="editItems" :editedItemprop="editedItem" :single-select="singleSelect" :selectedprop="deliveries_cart" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :defaultItem="defaultItem" :show_select="show_select" :dialogShowprop="dialogShowprop" :loading="isLoading" :cart_name="cart_name" />
         </v-card>
     </v-container>
 </template>
@@ -33,7 +33,8 @@ export default {
             show_select: true,
             deliveries_cart: JSON.parse(localStorage.getItem('deliveries_cart')) || null,
             singleSelect: false,
-            sortby: 'description',
+            sortby: ['category_id', 'quantity'],
+            sortdesc: [false, true],
             items_per_page: 20,
             dialog: false,
             dialogShowprop: false,
@@ -42,8 +43,8 @@ export default {
                 { text: 'Description', value: 'description' },
                 { text: 'QTY', value: 'quantity' },
                 { text: 'Price', value: 'price' },
-                { text: 'Category', value: 'category' },
-                { text: 'Actions', value: 'action', sortable: false }
+                { text: 'Category', value: 'category.title' },
+                 { text: 'Actions', value: 'action', sortable: false }
             ],
             editedIndex: -1,
             editedItem: {

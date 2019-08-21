@@ -1,5 +1,5 @@
 <template>
-    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="loading">
+    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="loading" multi-sort dense>
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>Items</v-toolbar-title>
@@ -26,7 +26,7 @@
                                         <v-text-field v-model="editedItem.price" label="Price"></v-text-field>
                                     </v-col>
                                     <v-col class="d-flex" sm="6" md="4">
-                                        <v-select :items="categories" v-model="editedItem.category_id" item-value="id" item-text="title" label="Category"></v-select>
+                                        <v-select :items="categories" v-model="editedItem.category" item-value="id" item-text="title" label="Category"></v-select>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field v-model="editedItem.type" label="Type"></v-text-field>
@@ -98,7 +98,6 @@ export default {
             this.items = this.items
         },
         editItem(item) {
-            console.log(item)
             this.editedIndex = this.items.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true

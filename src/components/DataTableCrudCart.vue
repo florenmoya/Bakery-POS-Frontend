@@ -1,5 +1,5 @@
 <template>
-    <v-data-table v-model="selected" dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" v-bind:show-select="show_select" :sort-by="sortby" :loading="loading">
+    <v-data-table v-model="selected" dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" v-bind:show-select="show_select" :sort-by="sortby" :sort-desc="sortdesc" :loading="loading" multi-sort>
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>Items</v-toolbar-title>
@@ -14,7 +14,7 @@
 const axios = require('axios')
 
 export default {
-    props: ['headers', 'items', 'dialogprop', 'editedIndexprop', 'editedItemprop', 'defaultItem', 'editItems', 'items_per_page','selectedprop', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'cart_name', 'link_name'],
+    props: ['headers', 'items', 'dialogprop', 'editedIndexprop', 'editedItemprop', 'defaultItem', 'editItems', 'items_per_page','selectedprop', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'sortdesc', 'cart_name', 'link_name'],
     data() {
         return {
             search: '',

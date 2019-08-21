@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DataTableCrud :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" />
+        <DataTableCrud :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" />
         <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
             {{ snackText }}
             <v-btn text @click="snack = false">Close</v-btn>
@@ -19,7 +19,8 @@ export default {
     },
     data() {
         return {
-            sortby: 'description',
+            sortby: ['category_id', 'quantity'],
+            sortdesc: [false, true],
             link_name: 'Items_Add',
             items_per_page: 20,
             dialog: false,
@@ -108,28 +109,28 @@ export default {
             }
         },
         update(item, editedItem) {
-                this.$store.dispatch('updateItem', {
-                        id: editedItem.id,
-                        description: editedItem.description,
-                        quantity: editedItem.quantity,
-                        category_id: editedItem.category_id,
-                        price: editedItem.price,
-                        type: editedItem.type,
-                        item_cost: editedItem.item_cost,
-                        notes: editedItem.notes
-                    })
-                    .then(response => {
-                        this.$store.dispatch('retrieveItems')
-                        this.snack = true
-                        this.snackColor = 'success'
-                        this.snackText = 'Data saved'
-                    })
-                    .catch(error => {
-                        this.snack = true
-                        this.snackColor = 'error'
-                        this.snackText = 'Error Please Try Again'
-                        console.log(error.response)
-                    });
+            this.$store.dispatch('updateItem', {
+                    id: editedItem.id,
+                    description: editedItem.description,
+                    quantity: editedItem.quantity,
+                    category_id: editedItem.category_id,
+                    price: editedItem.price,
+                    type: editedItem.type,
+                    item_cost: editedItem.item_cost,
+                    notes: editedItem.notes
+                })
+                .then(response => {
+                    this.$store.dispatch('retrieveItems')
+                    this.snack = true
+                    this.snackColor = 'success'
+                    this.snackText = 'Data saved'
+                })
+                .catch(error => {
+                    this.snack = true
+                    this.snackColor = 'error'
+                    this.snackText = 'Error Please Try Again'
+                    console.log(error.response)
+                });
         },
         create(items, editedItem) {
             this.$store.dispatch('storeItem', {

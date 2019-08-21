@@ -1,5 +1,5 @@
 <template>
-    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="loading">
+    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="loading" multi-sort>
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>{{title}}</v-toolbar-title>
