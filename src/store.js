@@ -80,7 +80,7 @@ export default new Vuex.Store({
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
             if (context.getters.loggedIn) {
                 return new Promise((resolve, reject) => {
-                    axios.post('http://localhost:8001/api/logout')
+                    axios.post('https://kyawposbackend.firewall-gateway.com/api/logout')
                         .then(function(response) {
 
                             localStorage.removeItem('username')
@@ -107,7 +107,7 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-                axios.post('http://localhost:8001/api/login', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/login', {
                         username: credentials.username,
                         password: credentials.password
                     })
@@ -130,7 +130,7 @@ export default new Vuex.Store({
         },
         registerUser(context, credentials) {
             return new Promise((resolve, reject) => {
-                axios.post('http://localhost:8001/api/register', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/register', {
                         name: credentials.name,
                         username: credentials.username,
                         password: credentials.password,
@@ -149,7 +149,7 @@ export default new Vuex.Store({
             context.commit('isLoading')
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/sales/register')
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/sales/register')
                     .then(function(response) {
                         localStorage.setItem('register', JSON.stringify(response.data))
                         context.commit('retrieveRegister', response.data)
@@ -165,7 +165,7 @@ export default new Vuex.Store({
         storeRegister(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/sales/register', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/sales/register', {
                         username: this.state.username,
                         amount: data.amount
                     })
@@ -182,7 +182,7 @@ export default new Vuex.Store({
         storeRegisterClose(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/sales/register/close', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/sales/register/close', {
                         username: this.state.username,
                         amount: data.amount
                     })
@@ -198,7 +198,7 @@ export default new Vuex.Store({
         storeSalesItem(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/sales', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/sales', {
                         register_id: data.register_id,
                         items: data.items
                     })
@@ -214,7 +214,7 @@ export default new Vuex.Store({
         storeRefundsItem(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/refunds', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/refunds', {
                         items: data.items
                     })
                     .then(function(response) {
@@ -229,7 +229,7 @@ export default new Vuex.Store({
         storeDeliveriesItem(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/deliveries', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/deliveries', {
                         items: data.items
                     })
                     .then(function(response) {
@@ -245,7 +245,7 @@ export default new Vuex.Store({
             context.commit('isLoading')
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/reports/sales')
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/sales')
                     .then(function(response) {
                         context.commit('retrieveSalesItem', response.data)
                         context.commit('isLoading')
@@ -261,7 +261,7 @@ export default new Vuex.Store({
             context.commit('isLoading')
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/items')
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/items')
                     .then(function(response) {
                         context.commit('retrieveItems', response.data)
                         context.commit('isLoading')
@@ -277,7 +277,7 @@ export default new Vuex.Store({
             context.commit('isLoading')
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/reports/deliveries')
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/deliveries')
                     .then(function(response) {
                         context.commit('retrieveDeliveries', response.data)
                         context.commit('isLoading')
@@ -293,7 +293,7 @@ export default new Vuex.Store({
             context.commit('isLoading')
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/reports/closing_counts')
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/closing_counts')
                     .then(function(response) {
                         context.commit('retrieveClosingCounts', response.data)
                         context.commit('isLoading')
@@ -308,7 +308,7 @@ export default new Vuex.Store({
         storeItem(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/items/store', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/items/store', {
                         id: data.id,
                         description: data.description,
                         quantity: data.quantity,
@@ -330,7 +330,7 @@ export default new Vuex.Store({
         updateItem(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/items/update', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/items/update', {
                         id: data.id,
                         description: data.description,
                         quantity: data.quantity,
@@ -353,7 +353,7 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-                axios.post('http://localhost:8001/api/items/delete', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/items/delete', {
                         items_id: data.id
                     })
                     .then(function(response) {
@@ -369,7 +369,7 @@ export default new Vuex.Store({
             context.commit('isLoading')
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/categories')
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/categories')
                     .then(function(response) {
                         context.commit('retrieveCategories', response.data)
                         context.commit('isLoading')
@@ -384,7 +384,7 @@ export default new Vuex.Store({
         storeCategories(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/categories/store', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/categories/store', {
                         id: data.id,
                         title: data.title
                     })
@@ -400,7 +400,7 @@ export default new Vuex.Store({
         updateCategories(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/categories/update', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/categories/update', {
                         id: data.id,
                         title: data.title
                     })
@@ -416,7 +416,7 @@ export default new Vuex.Store({
         deleteCategories(context, data) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/categories/delete', {
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/categories/delete', {
                         categories_id: data.id
                     })
                     .then(function(response) {
