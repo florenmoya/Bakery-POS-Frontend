@@ -18,8 +18,8 @@
             <v-spacer></v-spacer>
             <v-menu bottom left>
                 <template v-slot:activator="{ on }">
-                    <v-btn text  v-on="on">
-                      <span class="mr-2">{{ loggedUser }}</span>
+                    <v-btn text v-on="on">
+                        <span class="mr-2">{{ loggedUser }}</span>
                         <v-icon>mdi-account</v-icon>
                     </v-btn>
                 </template>
@@ -37,7 +37,7 @@
         <v-content>
             <router-view></router-view>
         </v-content>
-        <v-footer class="d-print-none"  app>
+        <v-footer class="d-print-none" app>
             <span>&copy; Moya's Bakery</span>
         </v-footer>
     </v-app>

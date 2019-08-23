@@ -31,6 +31,9 @@ export default {
                     .then(response => {
                         this.$router.push({ name: 'Items' })
                     })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             }
         }
     },

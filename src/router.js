@@ -225,15 +225,6 @@ export default new Router({
                 import( /* webpackChunkName: "about" */ "./views/Sales_Refunds_Add_Items.vue")
         },
         {
-            path: "/print",
-            name: "Print",
-            meta: {
-                requiresAuth: true
-            },
-            component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Print.vue")
-        },
-        {
             path: "/login",
             name: "Login",
             meta: {

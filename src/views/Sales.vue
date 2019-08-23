@@ -1,22 +1,25 @@
 <template>
-    <v-container v-if="!isLoading">
-        <div v-if="!retrieveRegister.active">
-            <div class="ma-2"> Registers
-                <hr>
+    <div>
+        <v-progress-linear indeterminate color="cyan" v-if="isLoading"></v-progress-linear>
+        <v-container v-if="!isLoading">
+            <div v-if="!retrieveRegister.active">
+                <div class="ma-2"> Registers
+                    <hr>
+                </div>
+                <ButtonList :button_list="register_inactive_button" />
             </div>
-            <ButtonList :button_list="register_inactive_button" />
-        </div>
-        <div v-if="retrieveRegister.active">
-            <div class="ma-2"> Sales
-                <hr>
+            <div v-if="retrieveRegister.active">
+                <div class="ma-2"> Sales
+                    <hr>
+                </div>
+                <ButtonList :button_list="sales_button" />
+                <div class="ma-2"> Registers
+                    <hr>
+                </div>
+                <ButtonList :button_list="register_button" />
             </div>
-            <ButtonList :button_list="sales_button" />
-            <div class="ma-2"> Registers
-                <hr>
-            </div>
-            <ButtonList :button_list="register_button" />
-        </div>
-    </v-container>
+        </v-container>
+    </div>
 </template>
 <script>
 import ButtonList from '../components/ButtonList'

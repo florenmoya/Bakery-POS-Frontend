@@ -68,7 +68,6 @@ export default {
         return {
             amount: 0,
             currentTime: null
-
         }
     },
     mounted() {

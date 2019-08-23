@@ -12,7 +12,7 @@
                                     <v-btn @click="submit_register()" color="white" class="mr-4">
                                         Submit
                                     </v-btn>
-                                    <v-btn @click="print()" color="white" class="mr-4">
+                                    <v-btn @click="print()" :loading="isLoading" color="white" class="mr-4">
                                         Print Inventory
                                     </v-btn>
                                 </v-form>
@@ -48,7 +48,7 @@
 </style>
 <script>
 import Print from '../components/Print';
-
+import { mapGetters } from 'vuex'
 import { mapState } from 'vuex'
 
 export default {
@@ -64,7 +64,9 @@ export default {
 
     },
     computed: {
-
+        ...mapGetters({
+            isLoading: 'isLoading'
+        }),
     },
     methods: {
         submit_register() {

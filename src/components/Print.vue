@@ -4,7 +4,7 @@
             <div class="heading">Signing Out: {{loggedUser}}
             </div>
             <div class="heading mt--2">
-                {{currentDate}}
+                {{currentTime}}
             </div>
         </div>
         <!--         <div class="items" v-for="i in rowCount">
@@ -77,6 +77,7 @@
 
 </style>
 <script>
+import { mapGetters } from 'vuex'
 import { mapState } from 'vuex'
 import moment from 'moment'
 
@@ -84,35 +85,37 @@ export default {
     data() {
         return {
             itemsPerRow: 2,
+            currentTime: null,
         }
     },
     mounted() {
         this.$store.dispatch('retrieveItems')
-        this.isLoaded = true;
     },
     methods: {
         itemCountInRow: function(index) {
             return this.categorized.slice((index - 1) * this.itemsPerRow, index * this.itemsPerRow)
+        },
+        updateCurrentTime() {
+            this.currentTime = moment().format('LTS LL');
         }
+    },
+    created() {
+        this.currentTime = moment().format('LTS LL');
+        setInterval(() => this.updateCurrentTime(), 1 * 1000);
     },
     computed: {
         categorized: function() {
             return this.items.filter(function(i) {
-                return i.category === 'Bread' && i.quantity != 0
+                return i.category_id == 1 && i.quantity != 0
             })
         },
         rowCount() {
             return Math.ceil(this.categorized.length / this.itemsPerRow);
         },
-        loggedUser() {
-            return this.$store.getters.loggedUser
-        },
-        currentDate() {
-            return moment().format('LLLL')
-        },
-        ...mapState([
-            'items', 'isLoading'
-        ]),
+        ...mapGetters({
+            items: 'retrieveItems',
+            loggedUser: 'loggedUser'
+        }),
     }
 }
 
