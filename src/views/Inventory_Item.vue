@@ -96,7 +96,7 @@ export default {
                     id: editedItem.id,
                     description: editedItem.description,
                     quantity: editedItem.quantity,
-                    category_id: editedItem.category_id,
+                    category_id: editedItem.category,
                     price: editedItem.price,
                     type: editedItem.type,
                     item_cost: editedItem.item_cost,
@@ -119,7 +119,7 @@ export default {
             this.$store.dispatch('storeItem', {
                     description: editedItem.description,
                     quantity: editedItem.quantity,
-                    category_id: editedItem.category_id,
+                    category_id: editedItem.category,
                     price: editedItem.price,
                     type: editedItem.type,
                     item_cost: editedItem.item_cost,

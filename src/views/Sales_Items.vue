@@ -2,7 +2,7 @@
     <v-container>
         <v-card>
             <v-tabs v-model="tab">
-                <v-tab v-for="tab in tabs" :key="tab.index" :to="tab.path">
+                <v-tab v-for="tab in tabs" :key="tab.index" :to="tab.path" oncontextmenu="return false;">
                     {{ tab.name }}
                 </v-tab>
                 <v-spacer></v-spacer>

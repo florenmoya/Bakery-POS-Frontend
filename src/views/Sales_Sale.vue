@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-card>
             <v-tabs v-model="tab" depressed>
-                <v-tab v-for="tab in tabs" :key="tab.index" :to="tab.path">
+                <v-tab v-for="tab in tabs" :key="tab.index" :to="tab.path" oncontextmenu="return false;">
                     {{ tab.name }}
                 </v-tab>
                 <v-tab-item v-for="tab in tabs" :key="tab.index" :id="tab.path">
@@ -127,7 +127,6 @@ export default {
     mounted() {
         this.$store.dispatch('retrieveRegister')
         if (localStorage.getItem('sales_cart')) this.sales_cart = JSON.parse(localStorage.getItem(this.cart_name));
-
     },
     computed: {
         ...mapGetters({

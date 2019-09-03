@@ -13,7 +13,8 @@
                 <v-icon @click="minusItem(props.item)">
                     remove
                 </v-icon>
-                <v-edit-dialog class="is-inline" :return-value.sync="props.item.quantity" large persistent @save="save(props.item)" @open="open">
+                <div class="is-inline-block">
+                <v-edit-dialog :return-value.sync="props.item.quantity" large persistent @save="save(props.item)" @open="open">
                     {{ props.item.cart_quantity }}
                     <template v-slot:input>
                         <div class="mt-4 title">Update Quantity</div>
@@ -22,6 +23,7 @@
                         <v-text-field v-model="props.item.cart_quantity" label="Edit" single-line autofocus></v-text-field>
                     </template>
                 </v-edit-dialog>
+            </div>
                 <v-icon @click="addItem(props.item)">
                     add
                 </v-icon>
@@ -93,8 +95,8 @@ export default {
 
 </script>
 <style scoped>
-.is-inline {
-    display: inline;
+.is-inline-block {
+    display: inline-block;
 }
 
 </style>

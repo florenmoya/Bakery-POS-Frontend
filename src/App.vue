@@ -2,7 +2,7 @@
     <v-app id="inspire">
         <v-navigation-drawer class="d-print-none" v-if="loggedIn" v-model="drawer" app clipped>
             <v-list dense>
-                <v-list-item @click="" v-for="item in menuItems" :key="item.title" :to="item.path">
+                <v-list-item @click="" v-for="item in menuItems" :key="item.title" :to="item.path" oncontextmenu="return false;">
                     <v-list-item-action>
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-item-action>

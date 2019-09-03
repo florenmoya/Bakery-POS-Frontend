@@ -1,5 +1,5 @@
 <template>
-    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="loading" multi-sort dense>
+    <v-data-table dense :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :loading="isLoading" multi-sort dense>
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>Items</v-toolbar-title>
@@ -118,6 +118,7 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
+                console.log(this.editedItem)
                 this.$parent.update(this.items[this.editedIndex], this.editedItem);
             } else {
                 this.$parent.create(this.items, this.editedItem);
