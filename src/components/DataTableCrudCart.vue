@@ -5,7 +5,6 @@
                 <v-toolbar-title>Items</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details class="mr-10"></v-text-field>
-                
             </v-toolbar>
         </template>
     </v-data-table>
@@ -14,14 +13,14 @@
 const axios = require('axios')
 
 export default {
-    props: ['headers', 'items', 'dialogprop', 'editedIndexprop', 'editedItemprop', 'defaultItem', 'editItems', 'items_per_page','selectedprop', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'sortdesc', 'cart_name', 'link_name'],
+    props: ['headers', 'items', 'dialogprop', 'editedIndexprop', 'editedItemprop', 'defaultItem', 'editItems', 'items_per_page', 'selectedprop', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'sortdesc', 'cart_name', 'link_name'],
     data() {
         return {
             search: '',
             dialog: this.dialogprop,
             selected: this.selectedprop,
             editedItem: this.editedItemprop,
-            editedIndex: this.editedIndexprop
+            editedIndex: this.editedIndexprop,
         }
     },
     computed: {
@@ -37,14 +36,15 @@ export default {
     watch: {
         dialog(val) {
             val || this.close()
-        }
+        },
     },
     mounted() {
         if (localStorage.getItem(this.cart_name)) {
             this.selected = JSON.parse(localStorage.getItem(this.cart_name))
         }
     },
-    destroyed() {
+
+    updated() {
         if (this.selected) {
             if (localStorage.getItem(this.cart_name)) {
                 let getItem = JSON.parse(localStorage.getItem(this.cart_name))
@@ -63,6 +63,11 @@ export default {
                 }
             }
             localStorage.setItem(this.cart_name, JSON.stringify(this.selected))
+
+            this.$store.dispatch('addCartItem', {
+                selected: this.selected,
+                cart_name: this.cart_name
+            })
         }
     },
     created() {

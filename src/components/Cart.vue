@@ -14,16 +14,16 @@
                     remove
                 </v-icon>
                 <div class="is-inline-block">
-                <v-edit-dialog :return-value.sync="props.item.quantity" large persistent @save="save(props.item)" @open="open">
-                    {{ props.item.cart_quantity }}
-                    <template v-slot:input>
-                        <div class="mt-4 title">Update Quantity</div>
-                    </template>
-                    <template v-slot:input>
-                        <v-text-field v-model="props.item.cart_quantity" label="Edit" single-line autofocus></v-text-field>
-                    </template>
-                </v-edit-dialog>
-            </div>
+                    <v-edit-dialog :return-value.sync="props.item.quantity" large persistent @save="save(props.item)" @open="open">
+                        {{ props.item.cart_quantity }}
+                        <template v-slot:input>
+                            <div class="mt-4 title">Update Quantity</div>
+                        </template>
+                        <template v-slot:input>
+                            <v-text-field v-model="props.item.cart_quantity" label="Edit" single-line autofocus></v-text-field>
+                        </template>
+                    </v-edit-dialog>
+                </div>
                 <v-icon @click="addItem(props.item)">
                     add
                 </v-icon>
@@ -37,6 +37,7 @@
 </template>
 <script>
 const axios = require('axios')
+
 export default {
     props: ['headers', 'items', 'items_per_page', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'cart_name'],
     data() {
