@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table hide-default-footer v-model="selected" :headers="headers" :items="items" :items-per-page="items_per_page" :loading="loading">
+        <v-data-table hide-default-footer :key="render_key" :headers="headers" :items="items" :items-per-page="items_per_page" :loading="loading">
             <template v-slot:item.action="{ item }">
                 <v-icon small @click="deleteItem(item)">
                     delete
@@ -9,22 +9,22 @@
             <template v-slot:item.total_price="{ item }">
                 {{ item.cart_quantity * item.price}}
             </template>
-            <template v-slot:item.quantity="props">
-                <v-icon @click="minusItem(props.item)">
+            <template v-slot:item.cart_quantity="{ item }">
+                <v-icon @click="minusItem(item)">
                     remove
                 </v-icon>
                 <div class="is-inline-block">
-                    <v-edit-dialog :return-value.sync="props.item.quantity" large persistent @save="save(props.item)" @open="open">
-                        {{ props.item.cart_quantity }}
+                    <v-edit-dialog :return-value.sync="item.cart_quantity" large @save="save(item)" @open="open">
+                        {{ item.cart_quantity }}
                         <template v-slot:input>
                             <div class="mt-4 title">Update Quantity</div>
                         </template>
                         <template v-slot:input>
-                            <v-text-field v-model="props.item.cart_quantity" label="Edit" single-line autofocus></v-text-field>
+                            <v-text-field v-model="item.cart_quantity" label="Edit" single-line autofocus></v-text-field>
                         </template>
                     </v-edit-dialog>
                 </div>
-                <v-icon @click="addItem(props.item)">
+                <v-icon @click="addItem(item)">
                     add
                 </v-icon>
             </template>
@@ -39,15 +39,17 @@
 const axios = require('axios')
 
 export default {
-    props: ['headers', 'items', 'items_per_page', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'cart_name'],
+    props: ['headers', 'items', 'items_per_page', 'loading', 'sortby', 'cart_name'],
     data() {
         return {
-            dialog: this.dialogprop,
-            selected: this.selectedprop,
+            render_key: 0,
             snack: false,
             snackColor: '',
             snackText: '',
         }
+    },
+    mounted() {
+        this.total_cart_price()
     },
     computed: {
         formTitle() {
@@ -55,18 +57,24 @@ export default {
         },
     },
     methods: {
+        reRender(){
+            this.render_key += 1
+            this.total_cart_price()
+        },
         addItem(item) {
             const index = this.items.indexOf(item)
             item.cart_quantity += 1
             Object.assign(this.items[index], item)
-            localStorage.setItem(this.cart_name, JSON.stringify(this.items));
+            localStorage.setItem(this.cart_name, JSON.stringify(this.items))
+            this.reRender()
         },
         minusItem(item) {
             if (item.cart_quantity > 0) {
                 const index = this.items.indexOf(item)
                 item.cart_quantity -= 1
                 Object.assign(this.items[index], item)
-                localStorage.setItem(this.cart_name, JSON.stringify(this.items));
+                localStorage.setItem(this.cart_name, JSON.stringify(this.items))
+                this.reRender()
             }
         },
         save(item) {
@@ -90,6 +98,14 @@ export default {
             this.snack = true
             this.snackColor = 'warning'
             this.snackText = 'Item Removed'
+            this.$emit('reRender');
+        },
+        total_cart_price() {
+            // let total_price = 0
+            // this.items.map(function(value, key) {
+            //     total_price += value.price * value.cart_quantity
+            // });
+            this.$emit('total_cart_price', this.items);
         },
     },
 }

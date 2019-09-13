@@ -9,12 +9,10 @@ const axios = require('axios')
 export default new Vuex.Store({
 
     state: {
+        api_links: [],
         token: localStorage.getItem('access_token') || null,
         username: localStorage.getItem('username') || null,
         register: JSON.parse(localStorage.getItem('register')) || null,
-        sales_cart: JSON.parse(localStorage.getItem('insertSalesCartItem')) || [],
-        bali_cart: JSON.parse(localStorage.getItem('insertSalesCartItem')) || [],
-        refund_cart: JSON.parse(localStorage.getItem('insertSalesCartItem')) || [],
         SalesItems: [],
         items: [],
         deliveries: [],
@@ -34,9 +32,6 @@ export default new Vuex.Store({
         },
         retrieveItems(state) {
             return state.items
-        },
-        sales_cart(state) {
-            return state.sales_cart
         },
         isLoading(state) {
             return state.isLoading
@@ -73,12 +68,6 @@ export default new Vuex.Store({
         destroyUsername(state) {
             state.username = null
         },
-        insertSalesCartItem(state, selected) {
-            state.sales_cart = selected
-        },
-        emptySalesCart(state) {
-            state.sales_cart = []
-        },
         isLoading(state) {
             if (!state.isLoading) {
                 state.isLoading = true
@@ -88,37 +77,30 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        addCartItem(context, data) {
-            context.commit(data.cart_name, data.selected)
-        },
-        emptySalesCart(context) {
-            context.commit('emptySalesCart')
-            localStorage.removeItem("insertSalesCartItem")
-        },
         destroyToken(context) {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
             if (context.getters.loggedIn) {
                 return new Promise((resolve, reject) => {
                     axios.post('http://localhost:8001/api/logout')
-                        .then(function(response) {
+                    .then(function(response) {
 
-                            localStorage.removeItem('username')
-                            context.commit('username')
+                        localStorage.removeItem('username')
+                        context.commit('username')
 
-                            localStorage.removeItem('access_token')
-                            context.commit('destroyToken')
-                            resolve(response);
-                        })
-                        .catch(function(error) {
+                        localStorage.removeItem('access_token')
+                        context.commit('destroyToken')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
 
-                            localStorage.removeItem('username')
-                            context.commit('username')
+                        localStorage.removeItem('username')
+                        context.commit('username')
 
-                            localStorage.removeItem('access_token')
-                            context.commit('destroyToken')
-                            reject(error)
+                        localStorage.removeItem('access_token')
+                        context.commit('destroyToken')
+                        reject(error)
 
-                        });
+                    });
                 })
             }
         },
@@ -127,25 +109,25 @@ export default new Vuex.Store({
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
                 axios.post('http://localhost:8001/api/login', {
-                        username: credentials.username,
-                        password: credentials.password
-                    })
-                    .then(function(response) {
-                        const token = response.data.access_token
+                    username: credentials.username,
+                    password: credentials.password
+                })
+                .then(function(response) {
+                    const token = response.data.access_token
 
-                        localStorage.setItem('username', credentials.username)
-                        context.commit('retrieveUsername', credentials.username)
+                    localStorage.setItem('username', credentials.username)
+                    context.commit('retrieveUsername', credentials.username)
 
-                        localStorage.setItem('access_token', token)
-                        context.commit('retrieveToken', token)
+                    localStorage.setItem('access_token', token)
+                    context.commit('retrieveToken', token)
 
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+                    resolve(response);
+                })
+                .catch(function(error) {
+                    context.commit('isLoading')
+                    console.log(error);
+                    reject(error)
+                });
             })
         },
         registerUser(context, credentials) {
@@ -153,21 +135,21 @@ export default new Vuex.Store({
 
             return new Promise((resolve, reject) => {
                 axios.post('http://localhost:8001/api/register', {
-                        name: credentials.name,
-                        username: credentials.username,
-                        password: credentials.password,
-                        password_confirmation: credentials.password_confirmation
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
+                    name: credentials.name,
+                    username: credentials.username,
+                    password: credentials.password,
+                    password_confirmation: credentials.password_confirmation
+                })
+                .then(function(response) {
+                    context.commit('isLoading')
 
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+                    resolve(response);
+                })
+                .catch(function(error) {
+                    context.commit('isLoading')
+                    console.log(error);
+                    reject(error)
+                });
             })
         },
         retrieveRegister(context) {
@@ -175,17 +157,17 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
                 axios.get('http://localhost:8001/api/sales/register')
-                    .then(function(response) {
-                        localStorage.setItem('register', JSON.stringify(response.data))
-                        context.commit('retrieveRegister', response.data)
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+                .then(function(response) {
+                    localStorage.setItem('register', JSON.stringify(response.data))
+                    context.commit('retrieveRegister', response.data)
+                    context.commit('isLoading')
+                    resolve(response);
+                })
+                .catch(function(error) {
+                    context.commit('isLoading')
+                    console.log(error);
+                    reject(error)
+                });
             })
         },
         storeRegister(context, data) {
@@ -194,20 +176,20 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
                 axios.post('http://localhost:8001/api/sales/register', {
-                        username: this.state.username,
-                        amount: data.amount
-                    })
-                    .then(function(response) {
-                        localStorage.setItem('register', JSON.stringify(response.data))
-                        context.commit('isLoading')
+                    username: this.state.username,
+                    amount: data.amount
+                })
+                .then(function(response) {
+                    localStorage.setItem('register', JSON.stringify(response.data))
+                    context.commit('isLoading')
 
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+                    resolve(response);
+                })
+                .catch(function(error) {
+                    context.commit('isLoading')
+                    console.log(error);
+                    reject(error)
+                });
             })
         },
         storeRegisterClose(context, data) {
@@ -216,320 +198,343 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
                 axios.post('http://localhost:8001/api/sales/register/close', {
-                        username: this.state.username,
-                        amount: data.amount
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+                    username: this.state.username,
+                    amount: data.amount
+                })
+                .then(function(response) {
+                    context.commit('isLoading')
+                    resolve(response);
+                })
+                .catch(function(error) {
+                    context.commit('isLoading')
+                    console.log(error);
+                    reject(error)
+                });
             })
         },
-        storeSalesItem(context, data) {
+        storeCartItem(context, data) {
             context.commit('isLoading')
+        // if(data.cart_name == 'sales_cart') context.state.api_links = 'http://localhost:8001/api/sales'
+        //     else if(data.cart_name == "bali_cart") context.state.api_links = 'http://localhost:8001/api/sales/bali'
+        //         else if(data.cart_name == "refunds_cart") context.state.api_links = 'http://localhost:8001/api/refunds'
+        //             else if(data.cart_name == "deliveries_cart") context.state.api_links = 'http://localhost:8001/api/deliveries'
 
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/sales', {
-                        register_id: data.register_id,
-                        items: data.items
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://127.0.0.1:8001/api/sales', {
+                register_id: data.register_id,
+                items: data.cart_items
             })
-
-        },
-        storeBalisItem(context, data) {
-            context.commit('isLoading')
-
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/sales/bali', {
-                        register_id: data.register_id,
-                        items: data.items
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .then(function(response) {
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        storeRefundsItem(context, data) {
-            context.commit('isLoading')
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
 
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/refunds', {
-                        items: data.items
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+    },
+    storeSalesItem(context, data) {
+        context.commit('isLoading')
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/sales', {
+                register_id: data.register_id,
+                items: data.items
             })
-        },
-        storeDeliveriesItem(context, data) {
-            context.commit('isLoading')
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/deliveries', {
-                        items: data.items
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .then(function(response) {
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        retrieveSalesItem(context) {
-            context.commit('isLoading')
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/reports/sales')
-                    .then(function(response) {
-                        context.commit('retrieveSalesItem', response.data)
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+
+    },
+    storeBalisItem(context, data) {
+        context.commit('isLoading')
+
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/sales/bali', {
+                register_id: data.register_id,
+                items: data.items
             })
-        },
-        retrieveItems(context) {
-            context.commit('isLoading')
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/items')
-                    .then(function(response) {
-                        context.commit('retrieveItems', response.data)
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .then(function(response) {
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        retrieveDeliveries(context) {
-            context.commit('isLoading')
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/reports/deliveries')
-                    .then(function(response) {
-                        context.commit('retrieveDeliveries', response.data)
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    storeRefundsItem(context, data) {
+        context.commit('isLoading')
+
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/refunds', {
+                items: data.items
             })
-        },
-        retrieveClosingCounts(context) {
-            context.commit('isLoading')
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/reports/closing_counts')
-                    .then(function(response) {
-                        context.commit('retrieveClosingCounts', response.data)
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .then(function(response) {
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        storeItem(context, data) {
-            context.commit('isLoading')
-
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/items/store', {
-                        id: data.id,
-                        description: data.description,
-                        quantity: data.quantity,
-                        category_id: data.category_id,
-                        price: data.price,
-                        type: data.type,
-                        item_cost: data.item_cost,
-                        notes: data.notes
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    storeDeliveriesItem(context, data) {
+        context.commit('isLoading')
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/deliveries', {
+                items: data.items
             })
-        },
-        updateItem(context, data) {
-            context.commit('isLoading')
-
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/items/update', {
-                        id: data.id,
-                        description: data.description,
-                        quantity: data.quantity,
-                        category_id: data.category_id,
-                        price: data.price,
-                        type: data.type,
-                        item_cost: data.item_cost,
-                        notes: data.notes
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .then(function(response) {
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        deleteItem(context, data) {
-            context.commit('isLoading')
-
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
-                axios.post('http://localhost:8001/api/items/delete', {
-                        items_id: data.id
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    retrieveSalesItem(context) {
+        context.commit('isLoading')
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.get('http://localhost:8001/api/reports/sales')
+            .then(function(response) {
+                context.commit('retrieveSalesItem', response.data)
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        retrieveCategories(context) {
-            context.commit('isLoading')
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/categories')
-                    .then(function(response) {
-                        context.commit('retrieveCategories', response.data)
-                        context.commit('isLoading')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    retrieveItems(context) {
+        context.commit('isLoading')
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.get('http://localhost:8001/api/items')
+            .then(function(response) {
+                context.commit('retrieveItems', response.data)
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        storeCategories(context, data) {
-            context.commit('isLoading')
-
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/categories/store', {
-                        id: data.id,
-                        title: data.title
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    retrieveDeliveries(context) {
+        context.commit('isLoading')
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.get('http://localhost:8001/api/reports/deliveries')
+            .then(function(response) {
+                context.commit('retrieveDeliveries', response.data)
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        updateCategories(context, data) {
-            context.commit('isLoading')
-
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/categories/update', {
-                        id: data.id,
-                        title: data.title
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    retrieveClosingCounts(context) {
+        context.commit('isLoading')
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.get('http://localhost:8001/api/reports/closing_counts')
+            .then(function(response) {
+                context.commit('retrieveClosingCounts', response.data)
+                context.commit('isLoading')
+                resolve(response);
             })
-        },
-        deleteCategories(context, data) {
-            context.commit('isLoading')
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    storeItem(context, data) {
+        context.commit('isLoading')
 
-            return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/categories/delete', {
-                        categories_id: data.id
-                    })
-                    .then(function(response) {
-                        context.commit('isLoading')
-
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        context.commit('isLoading')
-                        console.log(error);
-                        reject(error)
-                    });
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/items/store', {
+                id: data.id,
+                description: data.description,
+                quantity: data.quantity,
+                category_id: data.category_id,
+                price: data.price,
+                type: data.type,
+                item_cost: data.item_cost,
+                notes: data.notes
             })
-        }
+            .then(function(response) {
+                context.commit('isLoading')
+
+                resolve(response);
+            })
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    updateItem(context, data) {
+        context.commit('isLoading')
+
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/items/update', {
+                id: data.id,
+                description: data.description,
+                quantity: data.quantity,
+                category_id: data.category_id,
+                price: data.price,
+                type: data.type,
+                item_cost: data.item_cost,
+                notes: data.notes
+            })
+            .then(function(response) {
+                context.commit('isLoading')
+
+                resolve(response);
+            })
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    deleteItem(context, data) {
+        context.commit('isLoading')
+
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+            axios.post('http://localhost:8001/api/items/delete', {
+                items_id: data.id
+            })
+            .then(function(response) {
+                context.commit('isLoading')
+
+                resolve(response);
+            })
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    retrieveCategories(context) {
+        context.commit('isLoading')
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.get('http://localhost:8001/api/categories')
+            .then(function(response) {
+                context.commit('retrieveCategories', response.data)
+                context.commit('isLoading')
+                resolve(response);
+            })
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    storeCategories(context, data) {
+        context.commit('isLoading')
+
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/categories/store', {
+                id: data.id,
+                title: data.title
+            })
+            .then(function(response) {
+                context.commit('isLoading')
+
+                resolve(response);
+            })
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    updateCategories(context, data) {
+        context.commit('isLoading')
+
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/categories/update', {
+                id: data.id,
+                title: data.title
+            })
+            .then(function(response) {
+                context.commit('isLoading')
+
+                resolve(response);
+            })
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    deleteCategories(context, data) {
+        context.commit('isLoading')
+
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.post('http://localhost:8001/api/categories/delete', {
+                categories_id: data.id
+            })
+            .then(function(response) {
+                context.commit('isLoading')
+
+                resolve(response);
+            })
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
     }
+}
 });

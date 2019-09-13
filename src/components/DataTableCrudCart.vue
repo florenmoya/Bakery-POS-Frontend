@@ -13,14 +13,11 @@
 const axios = require('axios')
 
 export default {
-    props: ['headers', 'items', 'dialogprop', 'editedIndexprop', 'editedItemprop', 'defaultItem', 'editItems', 'items_per_page', 'selectedprop', 'single-select', 'show_select', 'dialogShowprop', 'loading', 'sortby', 'sortdesc', 'cart_name', 'link_name'],
+    props: ['headers', 'items', 'items_per_page', 'selectedData', 'single-select', 'show_select', 'loading', 'sortby', 'sortdesc', 'cart_name'],
     data() {
         return {
             search: '',
-            dialog: this.dialogprop,
-            selected: this.selectedprop,
-            editedItem: this.editedItemprop,
-            editedIndex: this.editedIndexprop,
+            selected: this.selectedData
         }
     },
     computed: {
@@ -31,12 +28,6 @@ export default {
             const selectedRow = this.selected[0];
             return selectedRow;
         }
-    },
-
-    watch: {
-        dialog(val) {
-            val || this.close()
-        },
     },
     mounted() {
         if (localStorage.getItem(this.cart_name)) {
@@ -72,13 +63,6 @@ export default {
     },
     created() {
         this.initialize()
-    },
-    mounted() {
-        if (this.$router.history.current.name == this.link_name) {
-            this.dialog = true
-        } else {
-            this.dialog = false
-        }
     },
     methods: {
         initialize() {

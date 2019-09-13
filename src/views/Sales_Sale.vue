@@ -13,7 +13,7 @@
                         <v-layout justify-space-between>
                             <v-flex xs6 md9>
                                 <v-container class="datatable mt-2 mb-2">
-                                    <Cart :headers="headers" :items="sales_cart" :single-select="singleSelect" :items_per_page="items_per_page" :dialogShowprop="dialogShowprop" :loading="isLoading" :cart_name="cart_name" />
+                                    <Cart :key="render_key" :headers="headersCart" :items="cart_items" :items_per_page="items_per_page" :loading="isLoading" :cart_name="cart_name" @total_cart_price="total_cart_price" @cart_select_items="cart_select_items"/>
                                 </v-container>
                             </v-flex>
                             <v-flex xs6 md3 class="is-radiusless">
@@ -25,7 +25,7 @@
                                             </v-flex>
                                             <v-flex xs6 md6>
                                                 <div class='text-right'>
-                                                    <span>{{cart_price}}</span>
+                                                    <span>{{cart_totalPrice}}</span>
                                                 </div>
                                             </v-flex>
                                         </v-layout>
@@ -48,13 +48,13 @@
                                             </v-flex>
                                             <v-flex xs6 md6>
                                                 <div class='text-right'>
-                                                    <h2>{{cart_price}}</h2>
+                                                    <h2>{{cart_totalPrice}}</h2>
                                                 </div>
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
                                     <v-container class="is-center">
-                                        <v-btn class="ma-2" tile color="darken-1" @click="complete_sale()" :loading="isLoading" dark>Submit Sale</v-btn>
+                                        <v-btn v-if="isEmpty" class="ma-2" tile color="darken-1" @click="storeCartItem()" :loading="isLoading" dark>Submit Sale</v-btn>
                                     </v-container>
                                 </v-container>
                             </v-flex>
@@ -63,7 +63,7 @@
                 </v-tab-item>
                 <v-tab-item>
                     <v-card flat>
-                        <DataTableCrudCart :key="render_key" :search="search" :headers="headers2" :items="retrieveItems" :dialogprop="dialog" :editedIndexprop="editedIndex" :editItems="editItems" :editedItemprop="editedItem" :single-select="singleSelect" :selectedprop="sales_cart" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :defaultItem="defaultItem" :show_select="show_select" :dialogShowprop="dialogShowprop" :loading="isLoading" :cart_name="cart_name" />
+                        <DataTableItems :key="render_key" :headers="headersItem" :items="retrieveItems" :selectedData="cart_items" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :show_select="show_select" :loading="isLoading" :cart_name="cart_name" @cart_select_items="cart_select_items"/>
                     </v-card>
                 </v-tab-item>
             </v-tabs>
@@ -95,16 +95,16 @@
 
 </style>
 <script>
-import Cart from '../components/Cart';
-import DataTableCrudCart from '../components/DataTableCrudCart';
 
-import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
+import Cart from '../components/Cart';
+import DataTableItems from '../components/DataTableItems';
 
 export default {
     components: {
         Cart,
-        DataTableCrudCart
+        DataTableItems
     },
     data() {
         return {
@@ -112,151 +112,83 @@ export default {
             snack: false,
             snackColor: '',
             snackText: '',
-            cart_name: 'insertSalesCartItem',
-            show_select: true,
-            singleSelect: false,
-            selected: [],
-            sortby: ['category_id', 'quantity'],
-            sortdesc: [false, true],
+            cart_name: 'sales_cart',
             items_per_page: 20,
-            dialog: false,
-            dialogShowprop: false,
-            search: '',
-            headers: [
-                { text: '#', value: 'action', sortable: false },
-                { text: 'Description', value: 'description', sortable: false },
-                { text: 'QTY', value: 'quantity', sortable: false },
-                { text: 'Price', value: 'price', sortable: false },
-                { text: 'Total Price', value: 'total_price', sortable: false }
+            cart_items: [],
+            cart_totalPrice: 0,
+            headersCart: [
+            { text: '#', value: 'action', sortable: false },
+            { text: 'Description', value: 'description', sortable: false },
+            { text: 'QTY', value: 'cart_quantity', sortable: false },
+            { text: 'Price', value: 'price', sortable: false },
+            { text: 'Total Price', value: 'total_price', sortable: false }
             ],
             // DataTableCrud
             show_select: true,
-            singleSelect: false,
-            headers2: [
-                { text: 'Description', value: 'description' },
-                { text: 'QTY', value: 'quantity' },
-                { text: 'Price', value: 'price' },
-                { text: 'Category', value: 'category.title' },
-
+            sortby: ['category_id', 'quantity'],
+            sortdesc: [false, true],
+            headersItem: [
+            { text: 'Description', value: 'description' },
+            { text: 'QTY', value: 'quantity' },
+            { text: 'Price', value: 'price' },
+            { text: 'Category', value: 'category.title' },
             ],
-            editedIndex: -1,
-            editedItem: {
-                description: '',
-                quantity: 0,
-                price: 0,
-                category: 0,
-                type: 0,
-                item_cost: 0,
-                notes: ''
-            },
-            editItems: [
-                { name: 'description' },
-                { name: 'quantity' },
-                { name: 'price' },
-                { name: 'category' },
-                { name: 'type' },
-                { name: 'item_cost' },
-                { name: 'notes' }
-            ],
-            defaultItem: {
-                description: '',
-                quantity: 0,
-                price: 0,
-                category: 0,
-                type: 0,
-                item_cost: 0,
-                notes: ''
-            },
         }
     },
     mounted() {
         this.$store.dispatch('retrieveRegister')
         this.$store.dispatch('retrieveItems')
+        if (localStorage.getItem(this.cart_name)) {
+            this.cart_items = JSON.parse(localStorage.getItem(this.cart_name))
+        }
     },
     computed: {
         ...mapGetters({
             retrieveRegister: 'retrieveRegister',
             isLoading: 'isLoading',
             retrieveItems: 'retrieveItems',
-            sales_cart: 'sales_cart',
         }),
-        cart_price: function() {
-            return this.total_cart_price()
-        },
+        isEmpty(){
+            return (this.cart_items.length > 0) ? true : false
+        }
     },
-
     methods: {
-        complete_sale() {
-            this.$store.dispatch('storeSalesItem', {
-                    register_id: this.retrieveRegister.id,
-                    items: this.sales_cart
-                })
-                .then(data => {
-                    this.$store.dispatch('emptySalesCart')
-                    this.render_key += 1;
-                    this.snack = true
-                    this.snackColor = 'success'
-                    this.snackText = 'Data saved'
-                })
-                .catch(error => {
-                    this.snack = true
-                    this.snackColor = 'error'
-                    this.snackText = 'Error Please Try Again'
-                    console.log(error.response)
-                });
+        reRender(){
+            this.render_key += 1
         },
-        total_cart_price() {
+        cart_select_items: function (value) {
+            this.cart_items = value
+            this.total_cart_price(this.cart_items)
+        },
+        storeCartItem() {
+            this.$store.dispatch('storeCartItem', {
+                cart_name: this.cart_name,
+                register_id: this.retrieveRegister.id,
+                cart_items: this.cart_items
+            })
+            .then(data => {
+                this.cart_items = [];
+                localStorage.setItem(this.cart_name, []);
+                this.reRender()
+                this.snack = true
+                this.snackColor = 'success'
+                this.snackText = 'Data saved'
+            })
+            .catch(error => {
+                this.snack = true
+                this.snackColor = 'error'
+                this.snackText = 'Error Please Try Again'
+                console.log(error.response)
+            });
+        },
+        total_cart_price(items) {
             let total_price = 0
-            this.sales_cart.map(function(value, key) {
+            items.map(function(value, key) {
                 total_price += value.price * value.cart_quantity
             });
-            return total_price
+            this.cart_totalPrice = total_price
+            localStorage.setItem(this.cart_name, items)
         },
-        destroyItem() {
-            this.$store.dispatch('destroyItem', {
-                    items_id: this.items_id
-                })
-                .then(response => {
-                    this.$router.push({ name: 'Items' })
-                })
-        },
-        deleteItem(item) {
-            const index = this.items.indexOf(item)
-
-            if (confirm('Are you sure you want to delete this item?')) {
-                this.$store.dispatch('deleteItem', {
-                        id: this.items[index].id
-                    })
-                    .then(response => {
-                        this.items.splice(index, 1)
-                    })
-            }
-        },
-        update(item, editedItem) {
-            this.$store.dispatch('updateItem', {
-                    id: editedItem.id,
-                    description: editedItem.description,
-                    quantity: editedItem.quantity,
-                    category: editedItem.category,
-                    price: editedItem.price,
-                    type: editedItem.type,
-                    item_cost: editedItem.item_cost,
-                    notes: editedItem.notes
-                })
-                .then(Object.assign(item, editedItem))
-        },
-        create(items, editedItem) {
-            this.$store.dispatch('storeItem', {
-                    description: editedItem.description,
-                    quantity: editedItem.quantity,
-                    category: editedItem.category,
-                    price: editedItem.price,
-                    type: editedItem.type,
-                    item_cost: editedItem.item_cost,
-                    notes: editedItem.notes
-                })
-                .then(items.push(editedItem))
-        }
     }
 }
 
