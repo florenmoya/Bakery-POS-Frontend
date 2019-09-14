@@ -42,7 +42,7 @@ export default {
                 description: '',
                 quantity: 0,
                 price: 0,
-                category_id: 0,
+                category: 0,
                 type: 0,
                 item_cost: 0,
                 notes: ''
@@ -51,7 +51,7 @@ export default {
                 description: '',
                 quantity: 0,
                 price: 0,
-                category_id: 0,
+                category: 0,
                 type: 0,
                 item_cost: 0,
                 notes: ''
@@ -96,7 +96,7 @@ export default {
                     id: editedItem.id,
                     description: editedItem.description,
                     quantity: editedItem.quantity,
-                    category_id: editedItem.category,
+                    category_id: editedItem.category.id,
                     price: editedItem.price,
                     type: editedItem.type,
                     item_cost: editedItem.item_cost,
