@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table hide-default-footer :key="render_key" :headers="headers" :items="items" :items-per-page="items_per_page" :loading="loading">
+        <v-data-table hide-default-footer :headers="headers" :items="items" :page.sync="page" :items-per-page="100" @page-count="pageCount = $event ":loading="loading">
             <template v-slot:item.action="{ item }">
                 <v-icon small @click="deleteItem(item)">
                     delete
@@ -29,23 +29,21 @@
                 </v-icon>
             </template>
         </v-data-table>
-        <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-            {{ snackText }}
-            <v-btn text @click="snack = false">Close</v-btn>
-        </v-snackbar>
+        <div class="text-center pt-2">
+      <v-pagination v-model="page" :length="pageCount" v-if="pageCount>1"></v-pagination>
+    </div>
     </div>
 </template>
 <script>
 const axios = require('axios')
 
 export default {
-    props: ['headers', 'items', 'items_per_page', 'loading', 'sortby', 'cart_name'],
+    props: ['headers', 'items', 'loading', 'sortby', 'cart_name'],
     data() {
         return {
-            render_key: 0,
-            snack: false,
-            snackColor: '',
-            snackText: '',
+        page: 1,
+        pageCount: 0,
+        itemsPerPage: 10,
         }
     },
     mounted() {
@@ -57,16 +55,12 @@ export default {
         },
     },
     methods: {
-        reRender(){
-            this.render_key += 1
-            this.total_cart_price()
-        },
         addItem(item) {
             const index = this.items.indexOf(item)
             item.cart_quantity += 1
             Object.assign(this.items[index], item)
             localStorage.setItem(this.cart_name, JSON.stringify(this.items))
-            this.reRender()
+                this.$emit('snack_alert', 'info', 'Quantity has been increased')
         },
         minusItem(item) {
             if (item.cart_quantity > 0) {
@@ -74,7 +68,7 @@ export default {
                 item.cart_quantity -= 1
                 Object.assign(this.items[index], item)
                 localStorage.setItem(this.cart_name, JSON.stringify(this.items))
-                this.reRender()
+                this.$emit('snack_alert', 'warning', 'Quantity has been decreased')
             }
         },
         save(item) {
@@ -83,10 +77,7 @@ export default {
             item.total_price = item.price * item.cart_quantity
             Object.assign(this.items[index], item)
             localStorage.setItem(this.cart_name, JSON.stringify(this.items));
-
-            this.snack = true
-            this.snackColor = 'success'
-            this.snackText = 'Completed'
+            this.$emit('snack_alert', 'warning', 'Quantity has been changed')
         },
         open(item) {
             const editedIndex = this.items.indexOf(item)
@@ -95,16 +86,9 @@ export default {
             const index = this.items.indexOf(item)
             Vue.delete(this.items, [index])
             localStorage.setItem(this.cart_name, JSON.stringify(this.items.filter(x => x)));
-            this.snack = true
-            this.snackColor = 'warning'
-            this.snackText = 'Item Removed'
-            this.$emit('reRender');
+            this.$emit('snack_alert', 'warning', 'Item Removed')
         },
         total_cart_price() {
-            // let total_price = 0
-            // this.items.map(function(value, key) {
-            //     total_price += value.price * value.cart_quantity
-            // });
             this.$emit('total_cart_price', this.items);
         },
     },

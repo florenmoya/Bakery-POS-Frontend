@@ -210,15 +210,6 @@ export default new Router({
                 import( /* webpackChunkName: "about" */ "./views/Inventory_Delivery_Add.vue")
         },
         {
-            path: "/inventory/delivery/add/items",
-            name: "Deliveries_Add_Items",
-            meta: {
-                requiresAuth: true
-            },
-            component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Inventory_Delivery_Add_Items.vue")
-        },
-        {
             path: "/sales/refunds/add",
             name: "Refunds_Add",
             meta: {
@@ -226,15 +217,6 @@ export default new Router({
             },
             component: () =>
                 import( /* webpackChunkName: "about" */ "./views/Sales_Refunds_Add.vue")
-        },
-        {
-            path: "/sales/refunds/add/items",
-            name: "Refunds_Add_Items",
-            meta: {
-                requiresAuth: true
-            },
-            component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales_Refunds_Add_Items.vue")
         },
         {
             path: "/login",

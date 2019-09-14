@@ -45,7 +45,6 @@ export default {
                 { text: 'Description', value: 'item.description' },
                 { text: 'QTY', value: 'total_quantity' },
                 { text: 'Price', value: 'total_price' },
-                { text: 'Category', value: 'item.category' }
             ],
             editedIndex: -1,
             editedItem: {

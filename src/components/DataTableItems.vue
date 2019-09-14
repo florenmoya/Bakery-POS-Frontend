@@ -23,23 +23,10 @@ export default {
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-        },
-        current_select() {
-            const selectedRow = this.selected[0];
-            const selectedData = this.selected.map(selectedRow => 
-            {
-                const item = this.selected.find(item => item.id === selectedRow.id)
-                if(item.cart_quantity){
-                }else{
-                    item.cart_quantity = 1;
-                }
-                return item
-            })
-            return selectedData;
         }
     },
     updated() {
-        this.$emit('cart_select_items', this.current_select);
+        this.$emit('cart_select_items', this.selected);
     },
 }
 

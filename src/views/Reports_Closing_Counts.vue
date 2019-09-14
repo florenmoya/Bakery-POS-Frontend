@@ -77,6 +77,9 @@ export default {
         this.$store.dispatch('retrieveClosingCounts')
         this.isLoaded = true;
     },
+    updated(){
+                console.log(this.closingcounts)
+            },
     computed: {
         total() {
             return this.closingcounts.reduce(function(prev, cur) {
