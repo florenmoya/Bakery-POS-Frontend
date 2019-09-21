@@ -17,7 +17,7 @@
                 {{item.description}} - {{item.quantity}} &nbsp
             </v-flex>
         </v-layout>
-    </div>
+   </div>
 </template>
 <style scoped>
 .print {
@@ -112,8 +112,10 @@ export default {
         rowCount() {
             return Math.ceil(this.categorized.length / this.itemsPerRow);
         },
+        ...mapState([
+            'items'
+        ]),
         ...mapGetters({
-            items: 'retrieveItems',
             loggedUser: 'loggedUser'
         }),
     }

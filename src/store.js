@@ -15,6 +15,7 @@ export default new Vuex.Store({
         register: JSON.parse(localStorage.getItem('register')) || null,
         SalesItems: [],
         items: [],
+        balis: [],
         deliveries: [],
         closingcounts: [],
         categories: [],
@@ -55,6 +56,9 @@ export default new Vuex.Store({
         },
         retrieveDeliveries(state, data) {
             state.deliveries = data
+        },
+        retrieveBalis(state, data) {
+            state.balis = data
         },
         retrieveClosingCounts(state, data) {
             state.closingcounts = data
@@ -356,6 +360,23 @@ export default new Vuex.Store({
             axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/deliveries')
             .then(function(response) {
                 context.commit('retrieveDeliveries', response.data)
+                context.commit('isLoading')
+                resolve(response);
+            })
+            .catch(function(error) {
+                context.commit('isLoading')
+                console.log(error);
+                reject(error)
+            });
+        })
+    },
+    retrieveBalis(context) {
+        context.commit('isLoading')
+        return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            axios.get('https://kyawposbackend.firewall-gateway.com/api/balis')
+            .then(function(response) {
+                context.commit('retrieveBalis', response.data)
                 context.commit('isLoading')
                 resolve(response);
             })
