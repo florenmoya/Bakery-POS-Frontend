@@ -7,6 +7,14 @@
                 <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details class="mr-10"></v-text-field>
             </v-toolbar>
         </template>
+        <template v-slot:item.created_at="{ item }" v-if="title == 'Closing Counts'">
+            {{item.created_at | moment}}
+        </template>
+        <template v-slot:item.updated_at="{ item }" v-if="title == 'Closing Counts'">
+            <template v-if="item.updated_at != item.created_at">
+            {{item.updated_at | moment}}
+        </template>
+        </template>
         <template v-slot:item.sales="{ item }" v-if="title == 'Closing Counts'">
             {{total_amount(item.sales, 'sales')}}
         </template>
@@ -23,6 +31,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import moment from 'moment'
 
 const axios = require('axios')
 
@@ -58,6 +67,11 @@ export default {
             this.dialog = true
         } else {
             this.dialog = false
+        }
+    },
+    filters: {
+        moment: function(date) {
+            return moment(date).format('MMMM Do YYYY, h:mm:ss a');
         }
     },
     methods: {
