@@ -40,10 +40,6 @@ export default {
                 name: 'Refund',
                 icon: 'money_off',
                 path: 'sales/refunds/add'
-            }, {
-                name: 'Bali',
-                icon: 'assignment_ind',
-                path: 'sales/bali'
             }],
             register_button: [{
                 name: 'Close Register',

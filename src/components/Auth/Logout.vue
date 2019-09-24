@@ -5,7 +5,7 @@ export default {
     mounted() {
         this.$store.dispatch('destroyToken')
             .then(response => {
-                this.$router.push({ name: 'Home' })
+                this.$router.push({ name: 'Login' })
             })
     }
 }

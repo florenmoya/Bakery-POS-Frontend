@@ -1,36 +1,23 @@
 <template>
     <div>
-        <DataTableCrudReports :headers="headers" :items="closingcounts" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :link_name="link_name" :title="title" />
+        <DataTableReportsClosing :title="title" :headers="headers" :items="closingcounts" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" />
     </div>
 </template>
-<style scoped>
-.datepicker {
-    display: inline;
-}
-
-</style>
 <script>
 import moment from 'moment'
-
-import DataTableCrudReports from '../components/DataTableCrudReports'
-
+import DataTableReportsClosing from '../components/DataTableReportsClosing'
 import { mapState } from 'vuex'
-
-const axios = require('axios')
 
 export default {
     components: {
-        DataTableCrudReports
+        DataTableReportsClosing
     },
     data() {
         return {
             title: 'Closing Counts',
             sortby: ['created_at'],
             sortdesc: [true],
-            link_name: 'Items_Add',
             items_per_page: 20,
-            dialog: false,
-            dialogShow: [],
             headers: [
                 { text: 'ID', value: 'id' },
                 { text: 'Opened At', value: 'created_at' },
@@ -41,45 +28,13 @@ export default {
                 { text: 'Refund', value: 'refunds' },
                 { text: 'Total', value: 'total' },
                 { text: 'Lost', value: 'lost' }
-            ],
-            editedIndex: -1,
-            editedItem: {
-                description: '',
-                quantity: 0,
-                price: 0,
-                category: 0,
-                type: 0,
-                item_cost: 0,
-                notes: ''
-            },
-            editItems: [
-                { name: 'description' },
-                { name: 'quantity' },
-                { name: 'price' },
-                { name: 'category' },
-                { name: 'type' },
-                { name: 'item_cost' },
-                { name: 'notes' }
-            ],
-            defaultItem: {
-                description: '',
-                quantity: 0,
-                price: 0,
-                category: 0,
-                type: 0,
-                item_cost: 0,
-                notes: ''
-            },
+            ]
         }
     },
 
     mounted() {
         this.$store.dispatch('retrieveClosingCounts')
-        this.isLoaded = true;
     },
-    updated(){
-                console.log(this.closingcounts)
-            },
     computed: {
         total() {
             return this.closingcounts.reduce(function(prev, cur) {
