@@ -1,43 +1,53 @@
 <template>
-    <v-data-table v-model="selected" item-key="item.description" :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :sort-desc="sortdesc" :single-select="singleSelect" :loading="loading" show-select multi-sort dense>
-        <template v-slot:top>
-            <v-toolbar flat color="white">
-                <v-toolbar-title>{{title}}</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-text-field v-model="search" append-icon="search" label="Select month (YYYY-MM-d)" single-line hide-details class="mr-10"></v-text-field>
-            </v-toolbar>
-        </template>
-        <template v-slot:item.item.created_at="{ item }" v-if="title == 'Deliveries'">
-            {{item.item.created_at | moment}}
-        </template>
-        <template v-slot:item.created_at="{ item }" v-if="title == 'Closing Counts'">
-            {{item.created_at | moment}}
-        </template>
-        <template v-slot:item.updated_at="{ item }" v-if="title == 'Closing Counts'">
-            <template v-if="item.updated_at != item.created_at">
-                {{item.updated_at | moment}}
-            </template>
-        </template>
-        <template v-slot:item.sales="{ item }" v-if="title == 'Closing Counts'">
-            {{total_amount(item.sales, 'sales')}}
-        </template>
-        <template v-slot:item.refunds="{ item }" v-if="title == 'Closing Counts'">
-            {{total_amount(item.refunds, 'refunds')}}
-        </template>
-        <template v-slot:item.total="{ item }" v-if="title == 'Closing Counts'">
-            {{total_amount(item.sales, 'sales')+total_amount(item.refunds, 'refunds')+item.starting_amount}}
-        </template>
-        <template v-slot:item.lost="{ item }" v-if="title == 'Closing Counts'">
-            {{(total_amount(item.sales, 'sales')+item.starting_amount+total_amount(item.refunds, 'refunds'))-item.ending_amount}}
-        </template>
-        <template v-slot:body.append>
-            <tr>
-                <td class="text-right" :colspan="headers.length">
-                    Total: {{selectedTotal}}
-                </td>
-            </tr>
-        </template>
-    </v-data-table>
+   <div>
+    <v-container fluid>
+        <v-select
+        v-model="categories_selected"
+        :items="categories"
+        item-text="title"
+        item-value="title"
+        label="Select Item"
+        multiple
+        return-object
+        >
+        <template v-slot:selection="{ item, index }">
+            <v-chip v-if="index < 10">
+              <span>{{ item.title }}</span>
+          </v-chip>
+          <span
+          v-if="index === 10"
+          class="grey--text caption"
+          >(+{{ categories_selected.length - 10 }} others)</span>
+      </template>
+  </v-select>
+</v-container>
+<v-data-table v-model="selected" :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :sort-desc="sortdesc" :single-select="singleSelect" :loading="loading"
+:expanded.sync="expanded" show-expand multi-sort dense>
+<template v-slot:top>
+    <v-toolbar flat color="white">
+        <v-toolbar-title>{{title}}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-text-field v-model="search" append-icon="search" label="Select month (YYYY-MM-d)" single-line hide-details class="mr-10"></v-text-field>
+    </v-toolbar>
+</template>
+<template v-slot:item.created_at="{ item }" v-if="title == 'Deliveries'">
+    {{item.created_at | moment }}
+</template>
+
+<template v-slot:expanded-item="{ item }">
+  <td :colspan="headers.length">
+    <template v-for="deliveries_item in item.deliveries_item">{{deliveries_item.item.description}}: {{deliveries_item.quantity}}, </template></td>
+</template>
+<template v-slot:body.append>
+    <tr>
+        <td class="text-right" :colspan="headers.length">
+            Total: {{selectedTotal}}
+        </td>
+    </tr>
+</template>
+</v-data-table>
+</div>
+
 </template>
 <style scoped>
 .text-right {
@@ -52,34 +62,41 @@ import moment from 'moment'
 const axios = require('axios')
 
 export default {
-    props: ['title', 'headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'editItems', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'sortdesc', 'cart_name', 'link_name'],
+    props: ['title', 'headers', 'items', 'items_per_page', 'loading', 'sortby', 'sortdesc'],
     data() {
         return {
-            
+            categories_selected: [],
+            expanded: [],
+            singleExpand: false,
             search: '',
             singleSelect: false,
             selected: [],
-            dialog: this.dialog_prop,
-            editedItem: this.editedItem_prop,
-            editedIndex: this.editedIndex_prop
         }
     },
     computed: {
+        filteredItems() {
+            this.items.map(function(items) {
+            })
+        },
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
         },
         ...mapState([
-            'isLoading'
-        ]),
+            'isLoading', 'categories'
+            ]),
         selectedTotal() {
             let total = 0
             this.selected.map(function(item, index) {
-                total += Number(item.total_price)
+                item.deliveries_item.map(function(item, index) {
+                    total += item.price
+                })
             })
             return total;
         }
     },
-
+    updated(){
+        console.log(this.items)
+    },
     watch: {
         dialog(val) {
             val || this.close()
@@ -87,18 +104,13 @@ export default {
     },
     created() {
         this.initialize()
-    },
-    mounted() {
-        if (this.$router.history.current.name == this.link_name) {
-            this.dialog = true
-        } else {
-            this.dialog = false
-        }
-    },
+    },  
     filters: {
+        ItemCategoryFilter(item){
+            if(item){}
+        },
         moment: function(date) {
             return moment(date).format('MMMM Do YYYY, h:mm:ss a');
-
         },
         month: function(date) {
             const current_month = moment().format('M')
