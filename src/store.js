@@ -19,6 +19,7 @@ export default new Vuex.Store({
         deliveries: [],
         closingcounts: [],
         categories: [],
+        dashboard: [],
         isLoading: false
     },
     getters: {
@@ -47,6 +48,9 @@ export default new Vuex.Store({
         },
         retrieveUsername(state, username) {
             state.username = username
+        },
+        retrieveDashboard(state, data) {
+            state.dashboard = data
         },
         retrieveSalesItem(state, data) {
             state.SalesItems = data
@@ -85,26 +89,26 @@ export default new Vuex.Store({
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
             if (context.getters.loggedIn) {
                 return new Promise((resolve, reject) => {
-                    axios.post('http://localhost:8001/api/logout')
-                    .then(function(response) {
+                    axios.post('https://kyawposbackend.firewall-gateway.com/api/logout')
+                        .then(function(response) {
 
-                        localStorage.removeItem('username')
-                        context.commit('username')
+                            localStorage.removeItem('username')
+                            context.commit('username')
 
-                        localStorage.removeItem('access_token')
-                        context.commit('destroyToken')
-                        resolve(response);
-                    })
-                    .catch(function(error) {
+                            localStorage.removeItem('access_token')
+                            context.commit('destroyToken')
+                            resolve(response);
+                        })
+                        .catch(function(error) {
 
-                        localStorage.removeItem('username')
-                        context.commit('username')
+                            localStorage.removeItem('username')
+                            context.commit('username')
 
-                        localStorage.removeItem('access_token')
-                        context.commit('destroyToken')
-                        reject(error)
+                            localStorage.removeItem('access_token')
+                            context.commit('destroyToken')
+                            reject(error)
 
-                    });
+                        });
                 })
             }
         },
@@ -112,82 +116,98 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-                axios.post('http://localhost:8001/api/login', {
-                    username: credentials.username,
-                    password: credentials.password
-                })
-                .then(function(response) {
-                    const token = response.data.access_token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/login', {
+                        username: credentials.username,
+                        password: credentials.password
+                    })
+                    .then(function(response) {
+                        const token = response.data.access_token
 
-                    localStorage.setItem('username', credentials.username)
-                    context.commit('retrieveUsername', credentials.username)
+                        localStorage.setItem('username', credentials.username)
+                        context.commit('retrieveUsername', credentials.username)
 
-                    localStorage.setItem('access_token', token)
-                    context.commit('retrieveToken', token)
+                        localStorage.setItem('access_token', token)
+                        context.commit('retrieveToken', token)
 
-                    resolve(response);
-                })
-                .catch(function(error) {
-                    context.commit('isLoading')
-                    console.log(error);
-                    reject(error)
-                });
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
+            })
+        },
+        retrieveDashboard(context, credentials) {
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/dashboard')
+                    .then(function(response) {
+                        context.commit('retrieveDashboard', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
         },
         retrieveUser(context, credentials) {
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-                axios.get('http://localhost:8001/api/sales/register')
-                .then(function(response) {
-                    resolve(response);
-                })
-                .catch(function(error) {
-                    localStorage.removeItem("access_token");
-                    router.replace('/login')
-                    console.log(error);
-                    reject(error)
-                });
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/sales/register')
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        localStorage.removeItem("access_token");
+                        router.replace('/login')
+                        console.log(error);
+                        reject(error)
+                    });
             })
         },
         registerUser(context, credentials) {
             context.commit('isLoading')
 
             return new Promise((resolve, reject) => {
-                axios.post('http://localhost:8001/api/register', {
-                    name: credentials.name,
-                    username: credentials.username,
-                    password: credentials.password,
-                    password_confirmation: credentials.password_confirmation
-                })
-                .then(function(response) {
-                    context.commit('isLoading')
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/register', {
+                        name: credentials.name,
+                        username: credentials.username,
+                        password: credentials.password,
+                        password_confirmation: credentials.password_confirmation
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
 
-                    resolve(response);
-                })
-                .catch(function(error) {
-                    context.commit('isLoading')
-                    console.log(error);
-                    reject(error)
-                });
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
         },
         retrieveRegister(context) {
             context.commit('isLoading')
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.get('http://localhost:8001/api/sales/register')
-                .then(function(response) {
-                    localStorage.setItem('register', JSON.stringify(response.data))
-                    context.commit('retrieveRegister', response.data)
-                    context.commit('isLoading')
-                    resolve(response);
-                })
-                .catch(function(error) {
-                    context.commit('isLoading')
-                    console.log(error);
-                    reject(error)
-                });
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/sales/register')
+                    .then(function(response) {
+                        localStorage.setItem('register', JSON.stringify(response.data))
+                        context.commit('retrieveRegister', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
         },
         storeRegister(context, data) {
@@ -195,21 +215,21 @@ export default new Vuex.Store({
 
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/sales/register', {
-                    username: this.state.username,
-                    amount: data.amount
-                })
-                .then(function(response) {
-                    localStorage.setItem('register', JSON.stringify(response.data))
-                    context.commit('isLoading')
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/sales/register', {
+                        username: this.state.username,
+                        amount: data.amount
+                    })
+                    .then(function(response) {
+                        localStorage.setItem('register', JSON.stringify(response.data))
+                        context.commit('isLoading')
 
-                    resolve(response);
-                })
-                .catch(function(error) {
-                    context.commit('isLoading')
-                    console.log(error);
-                    reject(error)
-                });
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
         },
         storeRegisterClose(context, data) {
@@ -217,362 +237,362 @@ export default new Vuex.Store({
 
             return new Promise((resolve, reject) => {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.post('http://localhost:8001/api/sales/register/close', {
-                    username: this.state.username,
-                    amount: data.amount
-                })
-                .then(function(response) {
-                    context.commit('isLoading')
-                    resolve(response);
-                })
-                .catch(function(error) {
-                    context.commit('isLoading')
-                    console.log(error);
-                    reject(error)
-                });
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/sales/register/close', {
+                        username: this.state.username,
+                        amount: data.amount
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
         },
         storeCartItem(context, data) {
             context.commit('isLoading')
 
-                if(data.cart_name == 'sales_cart') context.state.api_links = 'http://localhost:8001/api/sales'
-                    else if(data.cart_name == "balis_cart") context.state.api_links = 'http://localhost:8001/api/balis'
-                        else if(data.cart_name == "refunds_cart") context.state.api_links = 'http://localhost:8001/api/refunds'
-                            else if(data.cart_name == "deliveries_cart") context.state.api_links = 'http://localhost:8001/api/deliveries'
+            if (data.cart_name == 'sales_cart') context.state.api_links = 'https://kyawposbackend.firewall-gateway.com/api/sales'
+            else if (data.cart_name == "balis_cart") context.state.api_links = 'https://kyawposbackend.firewall-gateway.com/api/balis'
+            else if (data.cart_name == "refunds_cart") context.state.api_links = 'https://kyawposbackend.firewall-gateway.com/api/refunds'
+            else if (data.cart_name == "deliveries_cart") context.state.api_links = 'https://kyawposbackend.firewall-gateway.com/api/deliveries'
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post(context.state.api_links, {
-                register_id: data.register_id,
-                items: data.cart_items
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post(context.state.api_links, {
+                        register_id: data.register_id,
+                        items: data.cart_items
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .then(function(response) {
-                context.commit('isLoading')
-                resolve(response);
-            })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
 
-    },
-    storeSalesItem(context, data) {
-        context.commit('isLoading')
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/sales', {
-                register_id: data.register_id,
-                items: data.items
+        },
+        storeSalesItem(context, data) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/sales', {
+                        register_id: data.register_id,
+                        items: data.items
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .then(function(response) {
-                context.commit('isLoading')
-                resolve(response);
-            })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
 
-    },
-    storeBalisItem(context, data) {
-        context.commit('isLoading')
+        },
+        storeBalisItem(context, data) {
+            context.commit('isLoading')
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/sales/bali', {
-                register_id: data.register_id,
-                items: data.items
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/sales/bali', {
+                        register_id: data.register_id,
+                        items: data.items
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .then(function(response) {
-                context.commit('isLoading')
-                resolve(response);
-            })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    storeRefundsItem(context, data) {
-        context.commit('isLoading')
+        },
+        storeRefundsItem(context, data) {
+            context.commit('isLoading')
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/refunds', {
-                items: data.items
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/refunds', {
+                        items: data.items
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .then(function(response) {
-                context.commit('isLoading')
-                resolve(response);
+        },
+        storeDeliveriesItem(context, data) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/deliveries', {
+                        items: data.items
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    storeDeliveriesItem(context, data) {
-        context.commit('isLoading')
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/deliveries', {
-                items: data.items
+        },
+        retrieveSalesItem(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/sales')
+                    .then(function(response) {
+                        context.commit('retrieveSalesItem', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .then(function(response) {
-                context.commit('isLoading')
-                resolve(response);
+        },
+        retrieveItems(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/items')
+                    .then(function(response) {
+                        context.commit('retrieveItems', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    retrieveSalesItem(context) {
-        context.commit('isLoading')
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.get('http://localhost:8001/api/reports/sales')
-            .then(function(response) {
-                context.commit('retrieveSalesItem', response.data)
-                context.commit('isLoading')
-                resolve(response);
+        },
+        retrieveDeliveries(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/deliveries')
+                    .then(function(response) {
+                        context.commit('retrieveDeliveries', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    retrieveItems(context) {
-        context.commit('isLoading')
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.get('http://localhost:8001/api/items')
-            .then(function(response) {
-                context.commit('retrieveItems', response.data)
-                context.commit('isLoading')
-                resolve(response);
+        },
+        retrieveBalis(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/balis')
+                    .then(function(response) {
+                        context.commit('retrieveBalis', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    retrieveDeliveries(context) {
-        context.commit('isLoading')
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.get('http://localhost:8001/api/reports/deliveries')
-            .then(function(response) {
-                context.commit('retrieveDeliveries', response.data)
-                context.commit('isLoading')
-                resolve(response);
+        },
+        retrieveClosingCounts(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/reports/closing_counts')
+                    .then(function(response) {
+                        context.commit('retrieveClosingCounts', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    retrieveBalis(context) {
-        context.commit('isLoading')
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.get('http://localhost:8001/api/balis')
-            .then(function(response) {
-                context.commit('retrieveBalis', response.data)
-                context.commit('isLoading')
-                resolve(response);
-            })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    retrieveClosingCounts(context) {
-        context.commit('isLoading')
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.get('http://localhost:8001/api/reports/closing_counts')
-            .then(function(response) {
-                context.commit('retrieveClosingCounts', response.data)
-                context.commit('isLoading')
-                resolve(response);
-            })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    storeItem(context, data) {
-        context.commit('isLoading')
+        },
+        storeItem(context, data) {
+            context.commit('isLoading')
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/items/store', {
-                id: data.id,
-                description: data.description,
-                quantity: data.quantity,
-                category_id: data.category_id,
-                price: data.price,
-                type: data.type,
-                item_cost: data.item_cost,
-                notes: data.notes
-            })
-            .then(function(response) {
-                context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/items/store', {
+                        id: data.id,
+                        description: data.description,
+                        quantity: data.quantity,
+                        category_id: data.category_id,
+                        price: data.price,
+                        type: data.type,
+                        item_cost: data.item_cost,
+                        notes: data.notes
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
 
-                resolve(response);
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    updateItem(context, data) {
-        context.commit('isLoading')
+        },
+        updateItem(context, data) {
+            context.commit('isLoading')
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/items/update', {
-                id: data.id,
-                description: data.description,
-                quantity: data.quantity,
-                category_id: data.category_id,
-                price: data.price,
-                type: data.type,
-                item_cost: data.item_cost,
-                notes: data.notes
-            })
-            .then(function(response) {
-                context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/items/update', {
+                        id: data.id,
+                        description: data.description,
+                        quantity: data.quantity,
+                        category_id: data.category_id,
+                        price: data.price,
+                        type: data.type,
+                        item_cost: data.item_cost,
+                        notes: data.notes
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
 
-                resolve(response);
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    deleteItem(context, data) {
-        context.commit('isLoading')
+        },
+        deleteItem(context, data) {
+            context.commit('isLoading')
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-            axios.post('http://localhost:8001/api/items/delete', {
-                items_id: data.id
-            })
-            .then(function(response) {
-                context.commit('isLoading')
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/items/delete', {
+                        items_id: data.id
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
 
-                resolve(response);
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    retrieveCategories(context) {
-        context.commit('isLoading')
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.get('http://localhost:8001/api/categories')
-            .then(function(response) {
-                context.commit('retrieveCategories', response.data)
-                context.commit('isLoading')
-                resolve(response);
+        },
+        retrieveCategories(context) {
+            context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.get('https://kyawposbackend.firewall-gateway.com/api/categories')
+                    .then(function(response) {
+                        context.commit('retrieveCategories', response.data)
+                        context.commit('isLoading')
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    storeCategories(context, data) {
-        context.commit('isLoading')
+        },
+        storeCategories(context, data) {
+            context.commit('isLoading')
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/categories/store', {
-                id: data.id,
-                title: data.title
-            })
-            .then(function(response) {
-                context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/categories/store', {
+                        id: data.id,
+                        title: data.title
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
 
-                resolve(response);
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    updateCategories(context, data) {
-        context.commit('isLoading')
+        },
+        updateCategories(context, data) {
+            context.commit('isLoading')
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/categories/update', {
-                id: data.id,
-                title: data.title
-            })
-            .then(function(response) {
-                context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/categories/update', {
+                        id: data.id,
+                        title: data.title
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
 
-                resolve(response);
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
-    },
-    deleteCategories(context, data) {
-        context.commit('isLoading')
+        },
+        deleteCategories(context, data) {
+            context.commit('isLoading')
 
-        return new Promise((resolve, reject) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-            axios.post('http://localhost:8001/api/categories/delete', {
-                categories_id: data.id
-            })
-            .then(function(response) {
-                context.commit('isLoading')
+            return new Promise((resolve, reject) => {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+                axios.post('https://kyawposbackend.firewall-gateway.com/api/categories/delete', {
+                        categories_id: data.id
+                    })
+                    .then(function(response) {
+                        context.commit('isLoading')
 
-                resolve(response);
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        context.commit('isLoading')
+                        console.log(error);
+                        reject(error)
+                    });
             })
-            .catch(function(error) {
-                context.commit('isLoading')
-                console.log(error);
-                reject(error)
-            });
-        })
+        }
     }
-}
 });

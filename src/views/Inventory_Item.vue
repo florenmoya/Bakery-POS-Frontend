@@ -92,11 +92,12 @@ export default {
             }
         },
         update(item, editedItem) {
+            console.log(editedItem.category)
             this.$store.dispatch('updateItem', {
                     id: editedItem.id,
                     description: editedItem.description,
                     quantity: editedItem.quantity,
-                    category_id: editedItem.category.id,
+                    category_id: editedItem.category,
                     price: editedItem.price,
                     type: editedItem.type,
                     item_cost: editedItem.item_cost,

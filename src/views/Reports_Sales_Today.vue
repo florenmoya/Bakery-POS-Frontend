@@ -27,7 +27,6 @@ export default {
             ],
         }
     },
-
     mounted() {
         this.$store.dispatch('retrieveSalesItem')
     },

@@ -93,10 +93,8 @@ export default {
         menuItems() {
             if (this.loggedUser != 'kyawkyaw') {
                 return [
-                    { title: 'Home', path: '/', icon: 'home' },
                     { title: 'Sales', path: '/sales', icon: 'money' },
                     { title: 'Inventory', path: '/inventory', icon: 'inventory' },
-                    { title: 'Settings', path: '/settings', icon: 'settings' }
                 ]
             } else {
                 return [
