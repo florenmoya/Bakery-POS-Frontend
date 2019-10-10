@@ -92,12 +92,15 @@ export default {
             }
         },
         update(item, editedItem) {
-            console.log(editedItem.category)
+            let category = "";
+            console.log(editedItem.category.id)
+            if (editedItem.category.id) category = editedItem.category.id
+            else { category = editedItem.category }
             this.$store.dispatch('updateItem', {
                     id: editedItem.id,
                     description: editedItem.description,
                     quantity: editedItem.quantity,
-                    category_id: editedItem.category,
+                    category_id: category,
                     price: editedItem.price,
                     type: editedItem.type,
                     item_cost: editedItem.item_cost,
@@ -117,10 +120,14 @@ export default {
                 });
         },
         create(items, editedItem) {
+            let category = "";
+            console.log(editedItem.category.id)
+            if (editedItem.category.id) category = editedItem.category.id
+            else { category = editedItem.category }
             this.$store.dispatch('storeItem', {
                     description: editedItem.description,
                     quantity: editedItem.quantity,
-                    category_id: editedItem.category,
+                    category_id: category,
                     price: editedItem.price,
                     type: editedItem.type,
                     item_cost: editedItem.item_cost,
