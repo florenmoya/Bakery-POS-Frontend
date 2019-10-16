@@ -46,6 +46,8 @@
 </template>
 <script>
 import Login from './components/Auth/Login'
+import Router from 'vue-router'
+
 export default {
 
     components: {
@@ -91,18 +93,18 @@ export default {
             return this.$store.getters.loggedUser
         },
         menuItems() {
-            if (this.loggedUser != 'kyawkyaw') {
-                return [
-                    { title: 'Sales', path: '/sales', icon: 'money' },
-                    { title: 'Inventory', path: '/inventory', icon: 'inventory' },
-                ]
-            } else {
+            if (this.loggedUser == 'kyawkyaw' || this.loggedUser == 'kyawkyawsr') {
                 return [
                     { title: 'Home', path: '/', icon: 'home' },
                     { title: 'Sales', path: '/sales', icon: 'money' },
                     { title: 'Inventory', path: '/inventory', icon: 'inventory' },
                     { title: 'Reports', path: '/reports', icon: 'report' },
                     { title: 'Settings', path: '/settings', icon: 'settings' }
+                ]
+            } else {
+                return [
+                    { title: 'Sales', path: '/sales', icon: 'money' },
+                    { title: 'Inventory', path: '/inventory', icon: 'inventory' },
                 ]
             }
         }

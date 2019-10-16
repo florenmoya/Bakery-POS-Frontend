@@ -1,45 +1,52 @@
 <template>
-        <UnderConstruction /> 
+    <div>
+        <v-container>
+            <span class="title">Settings</span>
+            <div>
+                <div class="ma-2"> General
+                    <hr>
+                </div>
+                <ButtonList :button_list="buttons" />
+            </div>
+            <div>
+                <div class="ma-2"> Advanced Setup
+                    <hr>
+                </div>
+                <ButtonList :button_list="buttons2" />
+            </div>
+        </v-container>
+    </div>
 </template>
 <script>
 import ButtonList from '../components/ButtonList'
-import UnderConstruction from '../components/UnderConstruction'
 
 export default {
     components: {
-        ButtonList,
-        UnderConstruction
+        ButtonList
     },
     data() {
         return {
-            sales_buttons: [{
-                name: 'Search Item',
-                icon: 'search',
-                path: '/inventory/item'
+            buttons: [{
+                name: 'Shop Setup',
+                icon: 'redo',
+                path: 'Shop/Setup'
             }, {
-                name: 'Add Item',
-                icon: 'add',
-                path: '/inventory/item/add'
+                name: 'Employee Setup',
+                icon: 'redo',
+                path: 'Employee/Setup'
+            }],            
+            buttons2: [ {
+                name: 'Employee Roles',
+                icon: 'money_off',
+                path: 'Employee/Roles'
+            },{
+                name: 'Import Item',
+                icon: 'money_off',
+                path: 'settings/import'
             }],
-            register_buttons: [{
-                name: 'Counts',
-                icon: 'playlist_add_check'
-            }, {
-                name: 'Categories',
-                icon: 'note',
-                path: '/inventory/categories'
-            }, {
-                name: 'Add Category',
-                icon: 'note_add',
-                path: '/inventory/categories/add'
-            }],
-            deliveries_buttons: [{
-                name: 'Add Delivery',
-                icon: 'library_add',
-                path: '/inventory/delivery/add'
-            }]
+
         }
-    }
+    },
 }
 
 </script>

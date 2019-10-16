@@ -3,8 +3,8 @@
         <span class="title">
             Dashboard
         </span>
-        <v-card class="d-flex flex-wrap" flat tile min-width="120px">
-            <v-card class="pa-2" outlined tile>
+        <v-card class="d-flex flex-wrap" flat tile min-width="130px">
+            <v-card class="pa-2 ml-2" outlined tile>
                 <v-card-title>₱{{dashboard['month_revenue']}}</v-card-title>
                 <v-card-text>
                     <span>Monthly</span><br>
@@ -13,7 +13,7 @@
                     </span>
                 </v-card-text>
             </v-card>
-            <v-card class="pa-2 " outlined tile min-width="120px">
+            <v-card class="pa-2 ml-2" outlined tile min-width="130px">
                 <v-card-title>₱{{dashboard['today_sales']}}</v-card-title>
                 <v-card-text>
                     <span>Daily</span><br>
@@ -22,7 +22,7 @@
                     </span>
                 </v-card-text>
             </v-card>
-            <v-card class="pa-2" outlined tile>
+            <v-card class="pa-2 ml-2" outlined tile min-width="130px">
                 <v-card-title>₱{{dashboard['month_bread_delivery']}}</v-card-title>
                 <v-card-text>
                     <span>Total Deliveries</span><br>
@@ -41,15 +41,15 @@
                     <thead>
                         <tr>
                             <th class="text-left">Name</th>
-                            <th class="text-left">Quantity</th>
+                            <th class="text-left">Price</th>
                             <th class="text-left">Category</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in top_products">
                             <td>{{ item['item']['description'] }}</td>
-                            <td>{{ item['total_quantity'] }}</td>
-                            <td>{{ item['item']['category']['title'] }}</td>
+                            <td>{{ item.total_price}}</td>
+                            <td><template v-if="item['item']['categories']">{{ item['item']['categories']['name'] }}</template></td>
                         </tr>
                     </tbody>
                 </template>
@@ -64,20 +64,20 @@
                     <thead>
                         <tr>
                             <th class="text-left">Name</th>
-                            <th class="text-left">Quantity</th>
+                            <th class="text-left">Stock</th>
                             <th class="text-left">Category</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in restock" v-if="item.category && item.category.title != 'Bread'">
+                        <tr v-for="item in restock" v-if="item.categories && item.categories.name != 'Bread'">
                             <td>{{ item.description }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td><template v-if="item.category">{{ item.category.title }}</template></td>
+                            <td>{{ item.stock }}</td>
+                            <td><template v-if="item.categories">{{ item.categories.name }}</template></td>
                         </tr>
-                        <tr v-for="item in restock" v-if="item.category && item.category.title == 'Bread'">
+                        <tr v-for="item in restock" v-if="item.categories && item.categories.name == 'Bread'">
                             <td>{{ item.description }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td><template v-if="item.category">{{ item.category.title }}</template></td>
+                            <td>{{ item.stock }}</td>
+                            <td><template v-if="item.categories">{{ item.categories.name }}</template></td>
                         </tr>
                     </tbody>
                 </template>

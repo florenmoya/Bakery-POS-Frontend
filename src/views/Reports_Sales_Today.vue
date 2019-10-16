@@ -23,7 +23,7 @@ export default {
                 { text: 'Description', value: 'item.description' },
                 { text: 'QTY', value: 'quantity' },
                 { text: 'Price', value: 'price' },
-                { text: 'Category', value: 'item.category' }
+                { text: 'Category', value: 'item.categories.name' }
             ],
         }
     },

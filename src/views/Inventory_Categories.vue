@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DataTableCrud :search="search" :headers="headers" :items="categories" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems_prop="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :sortby="sortby" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :link_name="link_name" />
+        <DataTableCrud :search="search" :headers="headers" :items="categories" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editItems_prop="editItems" :editedItem_prop="editedItem" :items_per_page="items_per_page" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :loading="isLoading" :title="title" :link_name="link_name" />
         <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
             {{ snackText }}
             <v-btn text @click="snack = false">Close</v-btn>
@@ -19,8 +19,8 @@ export default {
     },
     data() {
         return {
+            title: 'Categories',
             link_name: 'Categories_Add',
-            sortby: 'title',
             items_per_page: 20,
             dialog: false,
             dialogShow: false,
@@ -29,18 +29,18 @@ export default {
             snackText: '',
             search: '',
             headers: [
-                { text: 'Name', value: 'title' },
+                { text: 'Name', value: 'name' },
                 { text: 'Actions', value: 'action', sortable: false }
             ],
             editedIndex: -1,
             editedItem: {
-                title: ''
+                name: ''
             },
-            editItems: [
-                { name: 'title' }
-            ],
+            editItems: [{
+                name: ''
+            }],
             defaultItem: {
-                title: ''
+                name: ''
             },
         }
     },
@@ -72,7 +72,6 @@ export default {
         },
         deleteItem(item) {
             const index = this.categories.indexOf(item)
-
             if (confirm('Are you sure you want to delete this item?')) {
                 this.$store.dispatch('deleteCategories', {
                         id: this.categories[index].id
@@ -92,16 +91,15 @@ export default {
             }
         },
         update(item, editedItem) {
-            this.$store.dispatch('updateCategories', {
+                this.$store.dispatch('updateCategories', {
                     id: editedItem.id,
                     title: editedItem.title
                 })
                 .then(Object.assign(item, editedItem))
         },
         create(items, editedItem) {
-            this.$store.dispatch('storeCategories', {
-                    id: editedItem.id,
-                    title: editedItem.title
+                this.$store.dispatch('storeCategories', {
+                    name: editedItem.name
                 })
                 .then(response => {
                     this.$store.dispatch('retrieveCategories')

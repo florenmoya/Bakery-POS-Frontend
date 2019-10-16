@@ -23,7 +23,7 @@ export default {
                 { text: 'Opened At', value: 'created_at' },
                 { text: 'Closed At', value: 'updated_at' },
                 { text: 'Starting Amount', value: 'starting_amount' },
-                { text: 'Closing Amount', value: 'ending_amount' },
+                { text: 'Closing Amount', value: 'released_amount' },
                 { text: 'Sales', value: 'sales' },
                 { text: 'Refund', value: 'refunds' },
                 { text: 'Total', value: 'total' },

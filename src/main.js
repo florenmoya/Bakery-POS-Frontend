@@ -8,10 +8,11 @@ import vuetify from './plugins/vuetify';
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
+
     if (to.matched.some(record => record.meta.requiresAuth)) {
+        store.dispatch('retrieveUser')
         // this route requires auth, check if logged in
         // if not, redirect to login page.
-        store.dispatch('retrieveUser')
         if (!store.getters.loggedIn) {
             next({
                 name: 'Login'

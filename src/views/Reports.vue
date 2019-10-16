@@ -4,10 +4,7 @@
             <hr>
         </div>
         <ButtonList :button_list="sales_buttons" />
-        <div class="ma-2"> Inventory
-            <hr>
-        </div>
-        <ButtonList :button_list="register_buttons" />
+
     </v-container>
 </template>
 <script>
@@ -28,11 +25,6 @@ export default {
                 icon: 'close',
                 path: '/reports/closing_counts'
             }],
-            register_buttons: [{
-                name: 'Total Deliveries',
-                icon: 'note',
-                path: '/reports/Deliveries'
-            }]
         }
     }
 }

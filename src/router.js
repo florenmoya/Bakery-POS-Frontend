@@ -51,18 +51,6 @@ export default new Router({
                 import( /* webpackChunkName: "about" */ "./views/Reports_Sales_Today.vue")
         },
         {
-            path: "/reports/deliveries",
-            name: "Reports_Deliveries",
-            meta: {
-                requiresAuth: true
-            },
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Reports_Deliveries.vue")
-        },
-        {
             path: "/reports/closing_counts",
             name: "Reports_Closing_Counts",
             meta: {
@@ -97,18 +85,6 @@ export default new Router({
             // which is lazy-loaded when the route is visited.
             component: () =>
                 import( /* webpackChunkName: "about" */ "./views/Sales_Sale.vue")
-        },
-        {
-            path: "/sales/bali",
-            name: "Bali",
-            meta: {
-                requiresAuth: true
-            },
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales_Bali.vue")
         },
         {
             path: "/sales/register",
@@ -245,11 +221,61 @@ export default new Router({
         {
             path: "/logout",
             name: "Logout",
+            meta: {
+                requiresVisitor: true
+            },
             // route level code-splitting
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
                 import( /* webpackChunkName: "about" */ "./components/Auth/Logout")
-        }
+        },
+        {
+            path: "/shop/setup",
+            name: "Shop Setup",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Settings/Shop_Setup")
+        },
+        {
+            path: "/employee/setup",
+            name: "Employee Setup",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Settings/Employee_Setup")
+        },{
+            path: "/settings/import",
+            name: "Import Items",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Settings/Import_Items")
+        },
+        {
+            path: "/employee/roles",
+            name: "Employee Roles",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Settings/Employee_Roles")
+        },
     ]
 });

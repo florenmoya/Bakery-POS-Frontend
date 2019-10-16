@@ -8,7 +8,7 @@
                         <v-container>
                             <v-layout column>
                                 <v-form ref="form">
-                                    <v-text-field v-model="amount" label="Closing Amount" required></v-text-field>
+                                    <v-text-field v-model="released_amount" label="Closing Amount" required></v-text-field>
                                     <v-btn @click="submit_register()" color="white" class="mr-4">
                                         Submit
                                     </v-btn>
@@ -57,7 +57,7 @@ export default {
     },
     data() {
         return {
-            amount: 0,
+            released_amount: 0,
         }
     },
     mounted() {
@@ -71,7 +71,7 @@ export default {
     methods: {
         submit_register() {
             this.$store.dispatch('storeRegisterClose', {
-                    amount: this.amount
+                    released_amount: this.released_amount
                 })
                 .then(response => {
                     this.$router.push({ name: 'Sales' })

@@ -15,34 +15,30 @@
                         </v-card-title>
                         <v-card-text>
                             <v-container>
-                                <v-row v-if="link_name != 'Categories_Add'">
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.stock" label="Stock"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.price" label="Price"></v-text-field>
-                                    </v-col>
-                                    <v-col class="d-flex" sm="6" md="4">
-                                        <v-select :items="categories" v-model="editedItem.categories" item-value="id" item-text="name" label="Category"></v-select>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.type" label="Type"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.cost" label="Cost"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.notes" label="Note"></v-text-field>
-                                    </v-col>
+                                <v-row>
+                                    <template v-if="title == 'Employees'">
+                                        <v-col cols="12" sm="6" md="4">
+                                            <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="4">
+                                            <v-text-field v-model="editedItem.username" label="Username"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="4">
+                                            <v-text-field v-model="editedItem.password" label="Password"></v-text-field>
+                                        </v-col>
+                                        <v-col class="d-flex" sm="6" md="4">
+                                            <v-select :items="EmployeeRoles" v-model="editedItem.roles" item-value="id" item-text="name" label="Role"></v-select>
+                                        </v-col>
+                                    </template>
+                                    <template v-else-if="title == 'Employee Role'">
+                                        <v-col cols="12" sm="6" md="4">
+                                            <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="4">
+                                            <v-text-field v-model="editedItem.permission" label="Permission"></v-text-field>
+                                        </v-col>
+                                    </template>
                                 </v-row>
-
-                                <v-flex xs12 sm6 md4 v-else-if="link_name == 'Categories_Add'">
-                                    <v-text-field v-model="editedItem.name" label="Category Name"></v-text-field>
-                                </v-flex>
-
                             </v-container>
                         </v-card-text>
                         <v-card-actions>
@@ -72,7 +68,7 @@ const axios = require('axios')
 import { mapState } from 'vuex'
 
 export default {
-    props: ['headers', 'items', 'dialog_prop', 'editedIndex_prop', 'title', 'editedItem_prop', 'defaultItem', 'items_per_page', 'dialogShow_prop', 'loading', 'cart_name', 'link_name', 'editItems_prop'],
+    props: ['headers', 'items', 'dialog_prop', 'editedIndex_prop', 'editedItem_prop', 'defaultItem', 'items_per_page', 'dialogShow_prop', 'loading', 'sortby', 'title', 'cart_name', 'link_name', 'editItems_prop'],
     data() {
         return {
             search: '',
@@ -84,7 +80,7 @@ export default {
         }
     },
     mounted() {
-        this.$store.dispatch('retrieveCategories')
+        this.$store.dispatch('retrieveEmployeeRoles')
         if (this.$router.history.current.name == this.link_name) {
             this.dialog = true
         } else {
@@ -119,7 +115,6 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
-                console.log(this.editedItem)
                 this.$parent.update(this.items[this.editedIndex], this.editedItem);
             } else {
                 this.$parent.create(this.items, this.editedItem);
@@ -140,7 +135,7 @@ export default {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
         },
         ...mapState([
-            'categories', 'isLoading'
+            'EmployeeRoles', 'isLoading'
         ])
     },
 }

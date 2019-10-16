@@ -11,7 +11,7 @@
                     <v-container>
                         <v-layout column>
                             <v-form ref="form">
-                                <v-text-field v-model="amount" label="Starting Amount" required></v-text-field>
+                                <v-text-field v-model="starting_amount" label="Starting Amount" required></v-text-field>
                                 <v-btn @click="submit_register()" color="white" class="mr-4">
                                     Submit
                                 </v-btn>
@@ -66,7 +66,7 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            amount: 0,
+            starting_amount: 0,
             currentTime: null
         }
     },
@@ -81,7 +81,7 @@ export default {
     methods: {
         submit_register() {
             this.$store.dispatch('storeRegister', {
-                    amount: this.amount
+                    starting_amount: this.starting_amount
                 })
                 .then(response => {
                     this.$router.push({ name: 'Sales' })

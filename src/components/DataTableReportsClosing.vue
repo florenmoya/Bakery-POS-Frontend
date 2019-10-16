@@ -1,5 +1,5 @@
 <template>
-    <v-data-table :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :sort-by="sortby" :sort-desc="sortdesc" :loading="loading" dense>
+    <v-data-table :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :loading="loading" dense>
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>{{title}}</v-toolbar-title>
@@ -25,7 +25,7 @@
             {{total_amount(item.sales, 'sales')+total_amount(item.refunds, 'refunds')+item.starting_amount}}
         </template>
         <template v-slot:item.lost="{ item }">
-            {{(total_amount(item.sales, 'sales')+item.starting_amount+total_amount(item.refunds, 'refunds'))-item.ending_amount}}
+            {{(total_amount(item.sales, 'sales')+item.starting_amount+total_amount(item.refunds, 'refunds'))-item.released_amount}}
         </template>
     </v-data-table>
 </template>
@@ -42,7 +42,7 @@ import moment from 'moment'
 const axios = require('axios')
 
 export default {
-    props: ['title', 'headers', 'items', 'items_per_page', 'loading', 'sortby', 'sortdesc'],
+    props: ['title', 'headers', 'items', 'items_per_page', 'loading',],
     data() {
         return {
             search: '',
