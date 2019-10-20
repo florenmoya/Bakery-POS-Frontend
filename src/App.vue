@@ -47,6 +47,7 @@
 <script>
 import Login from './components/Auth/Login'
 import Router from 'vue-router'
+import { mapState } from 'vuex'
 
 export default {
 
@@ -84,8 +85,12 @@ export default {
     },
     created() {
         this.$vuetify.theme.light = true
+
     },
     computed: {
+        ...mapState([
+            'currentsales'
+        ]),
         loggedIn() {
             return this.$store.getters.loggedIn
         },

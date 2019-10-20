@@ -8,6 +8,9 @@
                         <v-container>
                             <v-layout column>
                                 <v-form ref="form">
+                                    <span class="mr-3">Total Cash: <strong>{{currentsales.current_cash}}</strong></span>
+                                    <span class="mr-3">Sales: <strong>{{currentsales.current_cash}}</strong></span>
+                                    <span class="mr-3">Refunds: <strong>{{currentsales.total_refunds}}</strong></span>
                                     <v-text-field v-model="released_amount" label="Closing Amount" required></v-text-field>
                                     <v-btn @click="submit_register()" color="white" class="mr-4">
                                         Submit
@@ -67,6 +70,9 @@ export default {
         ...mapGetters({
             isLoading: 'isLoading'
         }),
+        ...mapState([
+            'currentsales'
+        ]),
     },
     methods: {
         submit_register() {
@@ -74,7 +80,7 @@ export default {
                     released_amount: this.released_amount
                 })
                 .then(response => {
-                    this.$router.push({ name: 'Sales' })
+                    this.$router.push({ name: 'Logout' })
                 })
         },
         print() {

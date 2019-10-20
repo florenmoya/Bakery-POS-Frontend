@@ -39,7 +39,7 @@ export default {
                         password: this.password
                     })
                     .then(response => {
-                        this.$router.push({ name: 'Sales' })
+                        this.$router.push({ name: 'Sales Menu' })
                     })
             }
         }

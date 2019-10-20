@@ -1,6 +1,9 @@
 <template>
     <v-container fluid>
         <v-card>
+            <span class="mr-3">Total Cash: <strong>{{currentsales.current_cash}}</strong></span>
+            <span class="mr-3">Sales: <strong>{{currentsales.total_sales}}</strong></span>
+            <span class="mr-3">Refunds: <strong>{{currentsales.total_refunds}}</strong></span>
             <v-tabs>
                 <v-tab>
                     Sales
@@ -13,7 +16,7 @@
                         <v-layout justify-space-between>
                             <v-flex xs6 md9>
                                 <v-container class="datatable mt-2 mb-2">
-                                    <Cart :key="render_key" :headers="headersCart" :items="cart_items" :loading="isLoading" :cart_name="cart_name" @total_cart_price="total_cart_price" @cart_select_items="cart_select_items" @snack_alert="snack_alert"/>
+                                    <Cart :key="render_key" :headers="headersCart" :items="cart_items" :loading="isLoading" :cart_name="cart_name" @total_cart_price="total_cart_price" @cart_select_items="cart_select_items" @snack_alert="snack_alert" />
                                 </v-container>
                             </v-flex>
                             <v-flex xs6 md3 class="is-radiusless">
@@ -139,19 +142,20 @@ export default {
         if (localStorage.getItem(this.cart_name)) {
             this.cart_items = JSON.parse(localStorage.getItem(this.cart_name))
         }
+        this.$store.dispatch('retrieveCurrentSales')
         this.$store.dispatch('retrieveRegister')
         this.$store.dispatch('retrieveItems')
     },
     computed: {
         ...mapState([
-            'items', 'register', 'isLoading'
+            'items', 'register', 'isLoading', 'currentsales'
         ]),
         isEmpty() {
             return (this.cart_items.length > 0) ? true : false
         }
     },
     methods: {
-        snack_alert(color,text) {
+        snack_alert(color, text) {
             this.snack = true
             this.snackColor = color
             this.snackText = text
@@ -161,11 +165,9 @@ export default {
         cart_select_items(selected) {
             const selectedRow = selected[0];
 
-            this.cart_items = selected.map(selectedRow => 
-            {
+            this.cart_items = selected.map(selectedRow => {
                 const item = selected.find(item => item.id === selectedRow.id)
-                if(item.cart_quantity || item.cart_quantity == 0){
-                }else{
+                if (item.cart_quantity || item.cart_quantity == 0) {} else {
                     item.cart_quantity = 1;
                 }
                 return item
@@ -190,6 +192,8 @@ export default {
                     this.snack_alert('error', 'Error Please Try Again')
                     console.log(error.response)
                 });
+            this.$store.dispatch('retrieveCurrentSales')
+
         },
         total_cart_price(items) {
             let total_price = 0
