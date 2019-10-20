@@ -16,7 +16,7 @@ export default new Router({
         },
         {
             path: "/sales",
-            name: "Sales",
+            name: "Sales Menu",
             meta: {
                 requiresAuth: true
             },
@@ -76,7 +76,7 @@ export default new Router({
         },
         {
             path: "/sales/sale",
-            name: "Sale",
+            name: "Sales",
             meta: {
                 requiresAuth: true
             },
@@ -112,7 +112,7 @@ export default new Router({
         },
         {
             path: "/sales/items",
-            name: "Sales_Items",
+            name: "Sale Items",
             meta: {
                 requiresAuth: true
             },
@@ -148,7 +148,7 @@ export default new Router({
         },
         {
             path: "/inventory/item/add",
-            name: "Items_Add",
+            name: "Add Items",
             meta: {
                 requiresAuth: true
             },
@@ -169,7 +169,7 @@ export default new Router({
         },
         {
             path: "/inventory/categories/add",
-            name: "Categories_Add",
+            name: "Add Categories",
             meta: {
                 requiresAuth: true
             },
@@ -178,7 +178,7 @@ export default new Router({
         },
         {
             path: "/inventory/delivery/add",
-            name: "Deliveries_Add",
+            name: "Add Deliveries",
             meta: {
                 requiresAuth: true
             },
@@ -187,7 +187,7 @@ export default new Router({
         },
         {
             path: "/sales/refunds/add",
-            name: "Refunds_Add",
+            name: "Add Refunds",
             meta: {
                 requiresAuth: true
             },

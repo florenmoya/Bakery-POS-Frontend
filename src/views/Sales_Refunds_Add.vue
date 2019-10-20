@@ -63,7 +63,7 @@
                 </v-tab-item>
                 <v-tab-item>
                     <v-card flat>
-                        <DataTableItems :key="render_key" :headers="headersItem" :items="retrieveItems" :selectedData="cart_items" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :show_select="show_select" :loading="isLoading" :cart_name="cart_name" @cart_select_items="cart_select_items" />
+                        <DataTableItems :key="render_key" :headers="headersItem" :items="items" :selectedData="cart_items" :items_per_page="items_per_page" :sortby="sortby" :sortdesc="sortdesc" :show_select="show_select" :loading="isLoading" :cart_name="cart_name" @cart_select_items="cart_select_items" />
                     </v-card>
                 </v-tab-item>
             </v-tabs>
@@ -95,7 +95,6 @@
 
 </style>
 <script>
-import { mapGetters } from 'vuex'
 import { mapState } from 'vuex'
 import Cart from '../components/Cart';
 import DataTableItems from '../components/DataTableItems';
@@ -144,11 +143,9 @@ export default {
         this.$store.dispatch('retrieveItems')
     },
     computed: {
-        ...mapGetters({
-            retrieveRegister: 'retrieveRegister',
-            isLoading: 'isLoading',
-            retrieveItems: 'retrieveItems',
-        }),
+        ...mapState([
+            'items', 'isLoading', 'register'
+        ]),
         isEmpty() {
             return (this.cart_items.length > 0) ? true : false
         }
@@ -180,7 +177,7 @@ export default {
 
             this.$store.dispatch('storeCartItem', {
                     cart_name: this.cart_name,
-                    register_id: this.retrieveRegister.id,
+                    register_id: this.register.id,
                     cart_items: this.cart_items
                 })
                 .then(data => {
