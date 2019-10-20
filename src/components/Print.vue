@@ -14,7 +14,7 @@
         </div> -->
         <v-layout class="items" v-for="i in rowCount">
             <v-flex class="text-right" xs6 md6 v-for="item in itemCountInRow(i)">
-                {{item.description}} - {{item.quantity}} &nbsp
+                {{item.description}} - {{item.stock}} &nbsp
             </v-flex>
         </v-layout>
    </div>
@@ -106,7 +106,7 @@ export default {
     computed: {
         categorized: function() {
             return this.items.filter(function(i) {
-                return i.category_id == 1 && i.quantity != 0
+                return i.category_id == 1 && i.stock < 5
             })
         },
         rowCount() {
