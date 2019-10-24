@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-progress-linear indeterminate color="cyan" v-if="isLoading"></v-progress-linear>
-        <v-container v-if="!isLoading">
             <div v-if="register.released_user || !register">
                 <div class="ma-2"> Registers
                     <hr>
@@ -18,7 +17,6 @@
                 </div>
                 <ButtonList :button_list="register_button" />
             </div>
-        </v-container>
     </div>
 </template>
 <script>
@@ -55,7 +53,7 @@ export default {
             }],
         }
     },
-    mounted() {
+    beforeCreate() {
         this.$store.dispatch('retrieveRegister')
     },
     computed: {

@@ -1,5 +1,5 @@
 <template>
-    <v-data-table :search="search" :headers="headers" :items="items" :items-per-page="items_per_page" :loading="loading" dense>
+    <v-data-table :search="search" :headers="headers" :sort-by="sortby" :sort-desc="sortdesc" :items="items" :items-per-page="items_per_page" :loading="loading" dense>
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>{{title}}</v-toolbar-title>
@@ -29,10 +29,9 @@ import moment from 'moment'
 const axios = require('axios')
 
 export default {
-    props: ['title', 'headers', 'items', 'items_per_page', 'loading',],
+    props: ['title', 'headers', 'items', 'items_per_page', 'loading', 'sortby', 'sortdesc'],
     data() {
         return {
-
             search: '',
             singleSelect: false,
             selected: [],

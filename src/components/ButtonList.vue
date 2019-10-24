@@ -1,20 +1,27 @@
 <template>
-	<div>
-    <v-btn class="ma-2 text-center" :to="button_list.path" height="125px" width="125px" v-for="button_list in button_list">
-        <v-layout row wrap>
-            <v-flex xs12 class="mb-3">
-                <v-icon class="icon-3x">{{ button_list.icon }}</v-icon>
-            </v-flex>
-            <v-flex xs12>
-                <div class="list-size">{{ button_list.name }}</div>
-            </v-flex>
-        </v-layout>
-    </v-btn>
-</div>
+    <div>
+        <v-btn :loading="isLoading" class="ma-2 text-center" :to="button_list.path" height="125px" width="125px" v-for="button_list in button_list">
+            <v-layout row wrap>
+                <v-flex xs12 class="mb-3">
+                    <v-icon class="icon-3x">{{ button_list.icon }}</v-icon>
+                </v-flex>
+                <v-flex xs12>
+                    <div class="list-size">{{ button_list.name }}</div>
+                </v-flex>
+            </v-layout>
+        </v-btn>
+    </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
-    props: ['button_list']
+    props: ['button_list'],
+    computed: {
+        ...mapState([
+            'isLoading'
+        ]),
+    },
 }
 
 </script>

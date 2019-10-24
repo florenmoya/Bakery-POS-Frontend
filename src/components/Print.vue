@@ -1,78 +1,32 @@
-<template>
-    <div class="print d-none d-print-block">
+<template class="print">
+    <div class="print">
         <div>
-            <div class="heading">Signing Out: {{loggedUser}}
+            <div class="ma-0 pa-0">Signing Out: {{loggedUser}}
             </div>
-            <div class="heading mt--2">
+            <div class="ma-0 pa-0">
                 {{currentTime}}
             </div>
         </div>
-        <!--         <div class="items" v-for="i in rowCount">
-            <span xs6 md6 v-for="item in itemCountInRow(i)">
-                {{item.description}} - {{item.quantity}}
-            </span>
-        </div> -->
-        <v-layout class="items" v-for="i in rowCount">
-            <v-flex class="text-right" xs6 md6 v-for="item in itemCountInRow(i)">
-                {{item.description}} - {{item.stock}} &nbsp
-            </v-flex>
-        </v-layout>
-   </div>
+        <div class="flex">
+            <template v-for="item in items" v-if="item.category_id == 1 && item.stock < 5">
+               | {{item.description}}: {{item.stock}} 
+            </template>
+        </div>
+    </div>
 </template>
 <style scoped>
+.flex {
+    display: flex;
+}
+
 .print {
-    position: fixed;
     top: 0;
     left: 0;
     margin: 0;
     padding: 0;
     font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
-    width: 60mm;
-}
-
-.text-right {
-    text-align: right;
-}
-
-.items {
-    margin: -6px 0 -8px 0;
-    padding: 0;
-    font-size: 0.8em;
-    font-weight: 700;
-    white-space: nowrap;
-
-}
-
-.heading {
-    margin-left: 1mm;
-    margin-bottom: 0;
-    margin-right: 0;
-    margin-top: 0;
-    padding: 0;
-    font-size: 0.8em;
-    font-weight: 700;
-}
-
-.mt--1 {
-    margin-top: -1mm;
-}
-
-.mt--2 {
-    margin-top: -2mm;
-}
-
-.small-text {
-    margin-left: 1mm;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-right: 0;
-    font-size: 0.8em;
-    font-weight: 700;
-    padding: 0;
-}
-
-.text-left {
-    text-align: left;
+    width: 55mm;
+    position:fixed;
 }
 
 </style>
@@ -92,9 +46,6 @@ export default {
         this.$store.dispatch('retrieveItems')
     },
     methods: {
-        itemCountInRow: function(index) {
-            return this.categorized.slice((index - 1) * this.itemsPerRow, index * this.itemsPerRow)
-        },
         updateCurrentTime() {
             this.currentTime = moment().format('LTS LL');
         }
@@ -104,14 +55,6 @@ export default {
         setInterval(() => this.updateCurrentTime(), 1 * 1000);
     },
     computed: {
-        categorized: function() {
-            return this.items.filter(function(i) {
-                return i.category_id == 1 && i.stock < 5
-            })
-        },
-        rowCount() {
-            return Math.ceil(this.categorized.length / this.itemsPerRow);
-        },
         ...mapState([
             'items'
         ]),

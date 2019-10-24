@@ -85,7 +85,6 @@ export default {
     },
     created() {
         this.$vuetify.theme.light = true
-
     },
     computed: {
         ...mapState([
@@ -100,7 +99,7 @@ export default {
         menuItems() {
             if (this.loggedUser == 'kyawkyaw' || this.loggedUser == 'kyawkyawsr') {
                 return [
-                    { title: 'Home', path: '/', icon: 'home' },
+                    { title: 'Dashboard', path: '/dashboard', icon: 'home' },
                     { title: 'Sales', path: '/sales', icon: 'money' },
                     { title: 'Inventory', path: '/inventory', icon: 'inventory' },
                     { title: 'Reports', path: '/reports', icon: 'report' },

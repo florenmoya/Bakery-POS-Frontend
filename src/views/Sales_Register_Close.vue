@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Print />
+        <Print id="print_close"/>
         <v-container class="d-print-none" fluid>
             <v-card>
                 <v-layout justify-space-between>
@@ -9,9 +9,9 @@
                             <v-layout column>
                                 <v-form ref="form">
                                     <span class="mr-3">Total Cash: <strong>{{currentsales.current_cash}}</strong></span>
-                                    <span class="mr-3">Sales: <strong>{{currentsales.current_cash}}</strong></span>
+                                    <span class="mr-3">Sales: <strong>{{currentsales.total_sales}}</strong></span>
                                     <span class="mr-3">Refunds: <strong>{{currentsales.total_refunds}}</strong></span>
-                                    <v-text-field v-model="released_amount" label="Closing Amount" required></v-text-field>
+                                    <v-text-field v-model="released_amount" label="Closing Amount - Natirang pera" required></v-text-field>
                                     <v-btn @click="submit_register()" color="white" class="mr-4">
                                         Submit
                                     </v-btn>
@@ -50,9 +50,10 @@
 
 </style>
 <script>
-import Print from '../components/Print';
+import Print from '../components/Print'
 import { mapGetters } from 'vuex'
 import { mapState } from 'vuex'
+import print from 'print-js'
 
 export default {
     components: {
@@ -64,7 +65,7 @@ export default {
         }
     },
     mounted() {
-
+        this.$store.dispatch('retrieveCurrentSales')
     },
     computed: {
         ...mapGetters({
@@ -84,8 +85,7 @@ export default {
                 })
         },
         print() {
-
-            window.print()
+            printJS('print_close', 'html')
         }
     }
 }

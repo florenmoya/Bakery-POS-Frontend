@@ -10,6 +10,17 @@ export default new Router({
             path: "/",
             name: "Home",
             meta: {
+                requiresAuth: true,
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+                import( /* webpackChunkName: "about" */ "./views/Sales.vue")
+        }, {
+            path: "/dashboard",
+            name: "dashboard",
+            meta: {
                 requiresAuth: true
             },
             component: Home
@@ -18,7 +29,7 @@ export default new Router({
             path: "/sales",
             name: "Sales Menu",
             meta: {
-                requiresAuth: true
+                requiresAuth: true,
             },
             // route level code-splitting
             // this generates a separate chunk (about.[hash].js) for this route
@@ -253,7 +264,7 @@ export default new Router({
             // which is lazy-loaded when the route is visited.
             component: () =>
                 import( /* webpackChunkName: "about" */ "./views/Settings/Employee_Setup")
-        },{
+        }, {
             path: "/settings/import",
             name: "Import Items",
             meta: {

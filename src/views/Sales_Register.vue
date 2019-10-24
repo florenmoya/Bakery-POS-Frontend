@@ -11,7 +11,7 @@
                     <v-container>
                         <v-layout column>
                             <v-form ref="form">
-                                <v-text-field v-model="starting_amount" label="Starting Amount" required></v-text-field>
+                                <v-text-field v-model="starting_amount" label="Starting Amount - Tinirang pera" required></v-text-field>
                                 <v-btn @click="submit_register()" color="white" class="mr-4">
                                     Submit
                                 </v-btn>
@@ -27,8 +27,8 @@
                                 <v-list-item three-line>
                                     <v-list-item-content>
                                         <div class="overline mb-1">{{loggedUser}}</div>
-                                        <v-list-item-title class="headline mb-1">Check Water</v-list-item-title>
-                                        <v-list-item-subtitle>When its empty, send a message on telegram.</v-list-item-subtitle>
+                                        <v-list-item-title class="headline mb-1">Tingnan ang Laman</v-list-item-title>
+                                        <v-list-item-subtitle>Kapag ubos na ang isang container ng tubig, imessage ako sa telegram</v-list-item-subtitle>
                                     </v-list-item-content>
                                     <v-list-item-avatar tile size="80" color="grey">
                                         <v-img class="white--text" src="https://5.imimg.com/data5/QB/FL/MY-27577041/20-litre-mineral-water-jar-500x500.jpg" />

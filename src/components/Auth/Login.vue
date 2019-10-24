@@ -6,7 +6,7 @@
                 <span>
                     Login
                 </span>
-                <v-text-field v-model="username" :counter="10" :rules="usernameRules" label="Username" required></v-text-field>
+                <v-text-field v-model="username" :counter="20" :rules="usernameRules" label="Username" required></v-text-field>
                 <v-text-field :type="false ? 'text' : 'password'" v-model="password" :rules="passwordRules" label="Password" required></v-text-field>
                 <v-btn :disabled="!valid" color="success" class="mr-4 mt-4" @click="login">
                     Login
