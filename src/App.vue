@@ -97,7 +97,7 @@ export default {
             return this.$store.getters.loggedUser
         },
         menuItems() {
-            if (this.loggedUser == 'kyawkyaw' || this.loggedUser == 'kyawkyawsr') {
+            if (this.loggedUser == 'kyawkyaw' || this.loggedUser == 'kyawsanisidro') {
                 return [
                     { title: 'Dashboard', path: '/dashboard', icon: 'home' },
                     { title: 'Sales', path: '/sales', icon: 'money' },

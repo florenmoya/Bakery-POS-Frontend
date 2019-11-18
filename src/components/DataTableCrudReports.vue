@@ -1,5 +1,8 @@
 <template>
     <v-data-table :search="search" :headers="headers" :sort-by="sortby" :sort-desc="sortdesc" :items="items" :items-per-page="items_per_page" :loading="loading" dense>
+        <template v-slot:item.created_at="{ item }">
+            {{item.created_at | moment}}
+        </template>
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>{{title}}</v-toolbar-title>

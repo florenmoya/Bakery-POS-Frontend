@@ -1,9 +1,6 @@
 <template>
     <v-container fluid>
         <v-card>
-            <span class="mr-3">Total Cash: <strong>{{currentsales.current_cash}}</strong></span>
-            <span class="mr-3">Sales: <strong>{{currentsales.total_sales}}</strong></span>
-            <span class="mr-3">Refunds: <strong>{{currentsales.total_refunds}}</strong></span>
             <v-tabs>
                 <v-tab>
                     Sales
@@ -71,6 +68,9 @@
                 </v-tab-item>
             </v-tabs>
         </v-card>
+                    <span class="mr-3">Total Cash: <strong>{{currentsales.current_cash}}</strong></span>
+            <span class="mr-3">Sales: <strong>{{currentsales.total_sales}}</strong></span>
+            <span class="mr-3">Refunds: <strong>{{currentsales.total_refunds}}</strong></span>
         <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
             {{ snackText }}
             <v-btn text @click="snack = false">Close</v-btn>

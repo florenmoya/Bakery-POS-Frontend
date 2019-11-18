@@ -5,7 +5,7 @@
         </span>
         <v-card class="d-flex flex-wrap" flat tile min-width="130px">
             <v-card class="pa-2 ml-2" outlined tile>
-                <v-card-title>₱{{dashboard['month_revenue']}}</v-card-title>
+                <v-card-title>₱{{dashboard['month_revenue'] || 0}}</v-card-title>
                 <v-card-text>
                     <span>Monthly</span><br>
                     <span class="text--primary">
@@ -14,7 +14,7 @@
                 </v-card-text>
             </v-card>
             <v-card class="pa-2 ml-2" outlined tile min-width="130px">
-                <v-card-title>₱{{dashboard['today_sales']}}</v-card-title>
+                <v-card-title>₱{{dashboard['today_sales'] || 0}}</v-card-title>
                 <v-card-text>
                     <span>Daily</span><br>
                     <span class="text--primary">
@@ -23,7 +23,7 @@
                 </v-card-text>
             </v-card>
             <v-card class="pa-2 ml-2" outlined tile min-width="130px">
-                <v-card-title>₱{{dashboard['month_bread_delivery']}}</v-card-title>
+                <v-card-title>₱{{dashboard['month_bread_delivery'] || 0}}</v-card-title>
                 <v-card-text>
                     <span>Total Deliveries</span><br>
                     <span class="text--primary">
