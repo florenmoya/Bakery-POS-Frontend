@@ -20,7 +20,7 @@ export default {
     data() {
         return {
             title: 'Item',
-            link_name: 'Items_Add',
+            link_name: 'Add Items',
             items_per_page: 20,
             dialog: false,
             dialogShow: [],

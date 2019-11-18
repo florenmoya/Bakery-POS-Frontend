@@ -20,7 +20,7 @@ export default {
     data() {
         return {
             title: 'Categories',
-            link_name: 'Categories_Add',
+            link_name: 'Add Categories',
             items_per_page: 20,
             dialog: false,
             dialogShow: false,

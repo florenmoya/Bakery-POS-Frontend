@@ -28,15 +28,6 @@
                                     <v-col class="d-flex" sm="6" md="4">
                                         <v-select :items="categories" v-model="editedItem.categories" item-value="id" item-text="name" label="Category"></v-select>
                                     </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.type" label="Type"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.cost" label="Cost"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.notes" label="Note"></v-text-field>
-                                    </v-col>
                                 </v-row>
 
                                 <v-flex xs12 sm6 md4 v-else-if="link_name == 'Categories_Add'">
