@@ -1,29 +1,29 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
 export default new Router({
     mode: 'history',
     routes: [{
-            path: "/",
-            name: "Home",
-            meta: {
-                requiresAuth: true,
-            },
+        path: "/",
+        name: "Home",
+        meta: {
+            requiresAuth: true,
+        },
             // route level code-splitting
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales.vue")
+            import( /* webpackChunkName: "about" */ "./views/Sales/Home.vue")
         }, {
             path: "/dashboard",
-            name: "dashboard",
+            name: "Dasboard",
             meta: {
                 requiresAuth: true
-            },
-            component: Home
+            },            
+            component: () =>
+            import( /* webpackChunkName: "about" */ "./views/Dashboard/Home.vue")
         },
         {
             path: "/sales",
@@ -35,7 +35,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales.vue")
+            import( /* webpackChunkName: "about" */ "./views/Sales/Home.vue")
         },
         {
             path: "/reports",
@@ -47,11 +47,11 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Reports.vue")
+            import( /* webpackChunkName: "about" */ "./views/Reports/Reports.vue")
         },
         {
             path: "/reports/sales",
-            name: "Reports_Sales",
+            name: "Sales Report",
             meta: {
                 requiresAuth: true
             },
@@ -59,11 +59,11 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Reports_Sales_Today.vue")
+            import( /* webpackChunkName: "about" */ "./views/Reports/Reports_Sales_Today.vue")
         },
         {
             path: "/reports/closing_counts",
-            name: "Reports_Closing_Counts",
+            name: " Closing Counts",
             meta: {
                 requiresAuth: true
             },
@@ -71,7 +71,19 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Reports_Closing_Counts.vue")
+            import( /* webpackChunkName: "about" */ "./views/Reports/Reports_Closing_Counts.vue")
+        },
+        {
+            path: "/reports/Activity_Log",
+            name: "Activity Log",
+            meta: {
+                requiresAuth: true
+            },
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () =>
+            import( /* webpackChunkName: "about" */ "./views/Reports/Activity_Log.vue")
         },
         {
             path: "/settings",
@@ -83,7 +95,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Settings.vue")
+            import( /* webpackChunkName: "about" */ "./views/Settings/Home.vue")
         },
         {
             path: "/sales/sale",
@@ -95,11 +107,11 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales_Sale.vue")
+            import( /* webpackChunkName: "about" */ "./views/Sales/Sales_Sale.vue")
         },
         {
             path: "/sales/register",
-            name: "Sale_Register",
+            name: "Opening of Register",
             meta: {
                 requiresAuth: true
             },
@@ -107,11 +119,11 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales_Register.vue")
+            import( /* webpackChunkName: "about" */ "./views/Sales/Sales_Register.vue")
         },
         {
             path: "/sales/register/Close",
-            name: "Sale_Register_Close",
+            name: "Closing Register",
             meta: {
                 requiresAuth: true
             },
@@ -119,19 +131,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales_Register_Close.vue")
-        },
-        {
-            path: "/sales/items",
-            name: "Sale Items",
-            meta: {
-                requiresAuth: true
-            },
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales_Items.vue")
+            import( /* webpackChunkName: "about" */ "./views/Sales/Sales_Register_Close.vue")
         },
         {
             path: "/inventory",
@@ -143,7 +143,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Inventory.vue")
+            import( /* webpackChunkName: "about" */ "./views/Inventory/Home.vue")
         },
         {
             path: "/inventory/item",
@@ -155,7 +155,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Inventory_Item.vue")
+            import( /* webpackChunkName: "about" */ "./views/Inventory/Inventory_Item.vue")
         },
         {
             path: "/inventory/item/add",
@@ -164,7 +164,7 @@ export default new Router({
                 requiresAuth: true
             },
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Inventory_Item.vue")
+            import( /* webpackChunkName: "about" */ "./views/Inventory/Inventory_Item.vue")
         },
         {
             path: "/inventory/categories",
@@ -176,7 +176,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Inventory_Categories.vue")
+            import( /* webpackChunkName: "about" */ "./views/Inventory/Inventory_Categories.vue")
         },
         {
             path: "/inventory/categories/add",
@@ -185,7 +185,7 @@ export default new Router({
                 requiresAuth: true
             },
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Inventory_Categories.vue")
+            import( /* webpackChunkName: "about" */ "./views/Inventory/Inventory_Categories.vue")
         },
         {
             path: "/inventory/delivery/add",
@@ -194,7 +194,7 @@ export default new Router({
                 requiresAuth: true
             },
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Inventory_Delivery_Add.vue")
+            import( /* webpackChunkName: "about" */ "./views/Inventory/Inventory_Delivery_Add.vue")
         },
         {
             path: "/sales/refunds/add",
@@ -203,7 +203,7 @@ export default new Router({
                 requiresAuth: true
             },
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Sales_Refunds_Add.vue")
+            import( /* webpackChunkName: "about" */ "./views/Sales/Sales_Refunds_Add.vue")
         },
         {
             path: "/login",
@@ -215,7 +215,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./components/Auth/Login")
+            import( /* webpackChunkName: "about" */ "./components/Auth/Login")
         },
         {
             path: "/Register",
@@ -227,7 +227,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./components/Auth/Register")
+            import( /* webpackChunkName: "about" */ "./components/Auth/Register")
         },
         {
             path: "/logout",
@@ -239,7 +239,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./components/Auth/Logout")
+            import( /* webpackChunkName: "about" */ "./components/Auth/Logout")
         },
         {
             path: "/shop/setup",
@@ -251,7 +251,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Settings/Shop_Setup")
+            import( /* webpackChunkName: "about" */ "./views/Settings/Shop_Setup")
         },
         {
             path: "/employee/setup",
@@ -263,7 +263,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Settings/Employee_Setup")
+            import( /* webpackChunkName: "about" */ "./views/Settings/Employee_Setup")
         }, {
             path: "/settings/import",
             name: "Import Items",
@@ -274,7 +274,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Settings/Import_Items")
+            import( /* webpackChunkName: "about" */ "./views/Settings/Import_Items")
         },
         {
             path: "/employee/roles",
@@ -286,7 +286,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () =>
-                import( /* webpackChunkName: "about" */ "./views/Settings/Employee_Roles")
+            import( /* webpackChunkName: "about" */ "./views/Settings/Employee_Roles")
         },
-    ]
-});
+        ]
+    });
