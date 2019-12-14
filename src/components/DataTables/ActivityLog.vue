@@ -7,7 +7,9 @@
                 <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details class="mr-10"></v-text-field>
             </v-toolbar>
         </template>
-
+        <template v-slot:item.created_at="{ item }">
+            {{item.created_at | moment}}
+        </template>
         <template v-slot:item.properties="{ item }">
             <span class="oldData">{{item.properties.old}}</span>
             <span class="newData">{{item.properties.attributes}}</span>

@@ -20,8 +20,7 @@
                 items_per_page: 20,
                 headers: [
                 { text: 'ID', value: 'id' },
-                { text: 'Opened At', value: 'created_at' },
-                { text: 'Closed At', value: 'updated_at' },
+                { text: 'DataTables', value: 'created_at' },
                 { text: 'Description', value: 'description' },
                 { text: 'Subject ID', value: 'subject_id' },
                 { text: 'Performed ID', value: 'causer_id' },
