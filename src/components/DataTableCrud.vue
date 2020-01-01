@@ -20,6 +20,9 @@
                                         <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
+                                        <v-file-input v-model="editedItem.image" accept="image/*" label="Image"></v-file-input>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
                                         <v-text-field v-model="editedItem.stock" label="Stock"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
@@ -29,11 +32,9 @@
                                         <v-select :items="categories" v-model="editedItem.categories" item-value="id" item-text="name" label="Category"></v-select>
                                     </v-col>
                                 </v-row>
-
                                 <v-flex xs12 sm6 md4 v-else-if="link_name == 'Categories_Add'">
                                     <v-text-field v-model="editedItem.name" label="Category Name"></v-text-field>
                                 </v-flex>
-
                             </v-container>
                         </v-card-text>
                         <v-card-actions>

@@ -30,11 +30,13 @@ export default {
             search: '',
             headers: [
                 { text: 'Description', value: 'description' },
+                { text: 'Image', value: 'image' },
                 { text: 'QTY', value: 'stock' },
                 { text: 'Price', value: 'price' },
                 { text: 'Category', value: 'categories.name' },
                 { text: 'Actions', value: 'action', sortable: false }
             ],
+            itemImage: '',
             editedIndex: -1,
             editedItem: {
                 description: '',
@@ -117,11 +119,22 @@ export default {
                 });
         },
         create(items, editedItem) {
+            let reader = new FileReader();
             let category = "";
             if (editedItem.categories.id) category = editedItem.categories.id
             else { category = editedItem.categories }
+
+            reader.readAsDataURL(editedItem.image)
+
+            reader.onload = (e) => {  
+                this.itemImage = e.target.result
+            }
+
+            console.log(this.itemImage)
+
             this.$store.dispatch('storeItem', {
                     description: editedItem.description,
+                    image: this.itemImage,
                     stock: editedItem.stock,
                     category_id: category,
                     price: editedItem.price,
@@ -137,11 +150,9 @@ export default {
                 })
                 .catch(error => {
                     this.snack = true
-                    this.snackColor = 'error'
-                    this.snackText = 'Error Please Try Again'
-                    console.log(error.response)
+                     console.log(error.response)
                 });
-        } 
+        }
     }
 };
 
