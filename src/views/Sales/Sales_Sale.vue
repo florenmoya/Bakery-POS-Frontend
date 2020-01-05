@@ -68,15 +68,16 @@
                 </v-tab-item>
             </v-tabs>
         </v-card>
-                    <span class="mr-3">Total Cash: <strong>{{currentsales.current_cash}}</strong></span>
-            <span class="mr-3">Sales: <strong>{{currentsales.total_sales}}</strong></span>
-            <span class="mr-3">Refunds: <strong>{{currentsales.total_refunds}}</strong></span>
-            <br>
-            <template v-if="currentsales.negativeItems.length > 0">
-            <h3 class="mt-5">May mali, ausin ang inventory sa computer</h3>
-            <p class="negativeItems" v-for="item in currentsales.negativeItems">{{item.description}} -> 
-                <span>{{item.stock}}</span></p>
-            </template>
+        <span class="mr-3">Total Cash: <strong>{{currentsales.current_cash}}</strong></span>
+        <span class="mr-3">Sales: <strong>{{currentsales.total_sales}}</strong></span>
+        <span class="mr-3">Refunds: <strong>{{currentsales.total_refunds}}</strong></span>
+        <br>
+        <template v-if="currentsales.negativeItems && currentsales.negativeItems.length > 0">
+            <h3 class="mt-5"> May mali, ausin ang inventory sa computer </h3>
+            <p class="negativeItems" v-for="item in currentsales.negativeItems">{{item.description}} ->
+                <span>{{item.stock}}</span>
+            </p>
+        </template>
         <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
             {{ snackText }}
             <v-btn text @click="snack = false">Close</v-btn>
@@ -101,13 +102,16 @@
 .is-fullheight {
     height: 100%;
 }
-.negativeItems{
-    margin:0;
-    padding:0;
+
+.negativeItems {
+    margin: 0;
+    padding: 0;
 }
-.negativeItems > span{
-color:darkred;
+
+.negativeItems>span {
+    color: darkred;
 }
+
 </style>
 <script>
 import { mapState } from 'vuex'

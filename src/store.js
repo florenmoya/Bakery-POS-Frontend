@@ -603,10 +603,14 @@ export default new Vuex.Store({
         },
         storeItem(context, data) {
             context.commit('isLoading')
-            
+
+            const options = {
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': 'Bearer ' + context.state.token
+                },
+            };
             return new Promise((resolve, reject) => {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-                axios.defaults.headers.common['Content-Type'] = 'multipart/form-data'
                 axios.post(process.env.VUE_APP_AIRPOS_API + '/api/items/store', {
                         description: data.description,
                         image: data.image,
@@ -615,8 +619,8 @@ export default new Vuex.Store({
                         price: data.price,
                         type: data.type,
                         cost: data.cost,
-                        notes: data.notes
-                    })
+                        notes: data.notes,
+                    }, options)
                     .then(function(response) {
                         resolve(response);
                         context.commit('isLoading')
