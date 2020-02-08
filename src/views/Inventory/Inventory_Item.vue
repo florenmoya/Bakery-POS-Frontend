@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DatatableInventoryItem :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editedItem_prop="editedItem" :items_per_page="items_per_page" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :link_name="link_name" :title="title" />
+        <DataTableCrud :search="search" :headers="headers" :items="items" :dialog_prop="dialog" :editedIndex_prop="editedIndex" :editedItem_prop="editedItem" :items_per_page="items_per_page" :defaultItem="defaultItem" :dialogShow_prop="dialogShow" :link_name="link_name" :title="title" />
         <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
             {{ snackText }}
             <v-btn text @click="snack = false">Close</v-btn>
@@ -8,14 +8,14 @@
     </div>
 </template>
 <script>
-import DatatableInventoryItem from '@/components/DatatableInventoryItem'
+import DataTableCrud from '@/components/DataTableCrud'
 import { mapState } from 'vuex'
 
 const axios = require('axios')
 
 export default {
     components: {
-        DatatableInventoryItem
+        DataTableCrud
     },
     data() {
         return {
@@ -28,7 +28,6 @@ export default {
             snackColor: '',
             snackText: '',
             search: '',
-            image: '',
             headers: [
                 { text: 'Description', value: 'description' },
                 { text: 'Image', value: 'image' },
@@ -120,63 +119,39 @@ export default {
                 });
         },
         create(items, editedItem) {
-            const reader = new FileReader();
+            let reader = new FileReader();
             let category = "";
-
             if (editedItem.categories.id) category = editedItem.categories.id
             else { category = editedItem.categories }
 
-            reader.onload = (e) => {
+            reader.readAsDataURL(editedItem.image)
 
-                this.$store.dispatch('storeItem', {
-                        description: editedItem.description,
-                        image: e.target.result,
-                        stock: editedItem.stock,
-                        category_id: category,
-                        price: editedItem.price,
-                        type: editedItem.type,
-                        cost: editedItem.cost,
-                        notes: editedItem.notes
-                    })
-                    .then(response => {
-                        this.$store.dispatch('retrieveItems')
-                        this.snack = true
-                        this.snackColor = 'success'
-                        this.snackText = 'Item added'
-                    })
-                    .catch(error => {
-                        this.snack = true
-                        console.log(error.response)
-                    });
-            }
-            reader.onerror = evt => {
-                console.error(evt);
-            }
-            if (editedItem.image) {
-                reader.readAsDataURL(editedItem.image);
-            } else {
-                this.$store.dispatch('storeItem', {
-                        description: editedItem.description,
-                        image: editedItem.image,
-                        stock: editedItem.stock,
-                        category_id: category,
-                        price: editedItem.price,
-                        type: editedItem.type,
-                        cost: editedItem.cost,
-                        notes: editedItem.notes
-                    })
-                    .then(response => {
-                        this.$store.dispatch('retrieveItems')
-                        this.snack = true
-                        this.snackColor = 'success'
-                        this.snackText = 'Item added'
-                    })
-                    .catch(error => {
-                        this.snack = true
-                        console.log(error.response)
-                    });
+            reader.onload = (e) => {  
+                this.itemImage = e.target.result
             }
 
+            console.log(this.itemImage)
+
+            this.$store.dispatch('storeItem', {
+                    description: editedItem.description,
+                    image: this.itemImage,
+                    stock: editedItem.stock,
+                    category_id: category,
+                    price: editedItem.price,
+                    type: editedItem.type,
+                    cost: editedItem.cost,
+                    notes: editedItem.notes
+                })
+                .then(response => {
+                    this.$store.dispatch('retrieveItems')
+                    this.snack = true
+                    this.snackColor = 'success'
+                    this.snackText = 'Item added'
+                })
+                .catch(error => {
+                    this.snack = true
+                     console.log(error.response)
+                });
         }
     }
 };
