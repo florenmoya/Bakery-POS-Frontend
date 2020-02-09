@@ -2,7 +2,7 @@
     <v-container bg fill-height grid-list-md>
         <v-layout row wrap align-center>
             <v-form ref="form" v-model="valid" lazy-validation class="center">
-                <h3 class="mb-10 text-center"> Moya's POS </h3>
+                <v-img class="mb-4" src="@/assets/logo.png" aspect-ratio="1.7" contain></v-img>
                 <span>
                     Login
                 </span>
